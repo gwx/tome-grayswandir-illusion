@@ -38,3 +38,31 @@ newEffect{
 			if self.player then for uid, e in pairs(game.level.entities) do if e.x then game.level.map:updateMap(e.x, e.y) end end game.level.map.changed = true end
 				end
 		end,}
+
+newEffect{
+	name = 'GRAYSWANDIR_CHAOS_CASCADE', image = 'talents/grayswandir_chaos_cascade.png',
+	desc = 'Chaos Cascade',
+	long_desc = function(self, eff)
+		return ('The target is strengthened by the chaos it\'s caused, gaining %d mindpower.')
+			:format(eff.mindpower * eff.stacks)
+		end,
+	type = 'mental',
+	charges = function(self, eff) return eff.stacks end,
+	subtype = {psi = true,},
+	status = 'beneficial',
+	parameters = {stacks = 1, max_stacks = 4, mindpower = 10,},
+	activate = function(self, eff)
+		self:autoTemporaryValues(eff, {
+				combat_mindpower = eff.mindpower * eff.stacks,})
+		end,
+	deactivate = function(self, eff) return true end,
+	on_merge = function(self, old, new)
+		self:autoTemporaryValuesRemove(old)
+		old.mindpower = math.max(old.mindpower, new.mindpower)
+		old.max_stacks = math.max(old.max_stacks, new.max_stacks)
+		old.stacks = math.min(old.max_stacks, old.stacks + new.stacks)
+		old.dur = math.max(old.dur, new.dur)
+		self:autoTemporaryValues(old, {
+				combat_mindpower = old.mindpower * old.stacks,})
+		return old
+		end,}

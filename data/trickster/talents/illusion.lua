@@ -170,7 +170,7 @@ newTalent {
 		return true
 		end,
 	info = function(self, t)
-		return ([[Place up to %d #SLATE#[*]#LAST# illusory walls within %d spaces, lasting for %d #SLATE#[*]#LAST# turns. Hostile creatures will need to make a mind save to move into those spaces. Each wall will cost %.1f psi.]])
+		return ([[Place up to %d #SLATE#[*]#LAST# illusory walls within %d spaces, lasting for %d #SLATE#[*]#LAST# turns. Hostile creatures will need to make a mind save to move into those spaces. Each wall will cost #7FFFD4#%.1f psi#LAST#.]])
 			:format(get(t.count, self, t),
 				get(t.range, self, t),
 				get(t.duration, self, t),
