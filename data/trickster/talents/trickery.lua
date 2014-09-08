@@ -80,3 +80,34 @@ newTalent {
 				get(t.duration, self, t),
 				get(t.max_stacks, self, t))
 		end,}
+
+newTalent {
+	name = 'Pandemonium', short_name = 'GRAYSWANDIR_PANDEMONIUM',
+	type = {'psionic/trickery', 3,},
+	points = 5,
+	require = make_require(3),
+	cooldown = 28,
+	no_energy = true,
+	psi = 12,
+	tactical = {BUFF = 3,},
+	project = function(self, t) return self:scale {low = 3, high = 18, t, 'cun', after = 'damage',} end,
+	duration = function(self, t) return self:scale {low = 1.5, high = 3, t, after = 'floor',} end,
+	on_pre_use = function(self, t, silent)
+		if self:hasEffect 'EFF_GRAYSWANDIR_CHAOS_CASCADE' then return true end
+		if not silent then
+			game.logPlayer(self, 'You need an active Chaos Cascade to use this.')
+			end
+		return false end,
+	action = function(self, t)
+		local cascade = self:hasEffect 'EFF_GRAYSWANDIR_CHAOS_CASCADE'
+		if not cascade then return end
+		self:setEffect('EFF_GRAYSWANDIR_PANDEMONIUM', get(t.duration, self, t), {
+				project = cascade.stacks * get(t.project, self, t)})
+		return true end,
+	info = function(self, t)
+		local mult = get(t.psi_stealth_mult, self, t)
+		local add = get(t.psi_stealth_add, self, t)
+		return ([[Focus your chaotic energy into your weapons. For %d #SLATE#[*]#LAST# turns you will deal an extra %d #SLATE#[*, cun]#LAST# #YELLOW#mind#LAST# damage on melee and ranged attacks for every stack of Chaos Cascade you have when using this ability.]])
+			:format(get(t.duration, self, t),
+				self:damDesc('MIND', get(t.project, self, t)))
+		end,}

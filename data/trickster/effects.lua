@@ -66,3 +66,21 @@ newEffect{
 				combat_mindpower = old.mindpower * old.stacks,})
 		return old
 		end,}
+
+newEffect{
+	name = 'GRAYSWANDIR_PANDEMONIUM', image = 'talents/grayswandir_pandemonium.png',
+	desc = 'Pandemonium',
+	long_desc = function(self, eff)
+		return ('The target is strengthened by the chaos it\'s caused, gaining %d mind damage on its melee and rangedattacks.')
+			:format(self:damDesc('MIND', eff.project))
+		end,
+	type = 'mental',
+	subtype = {psi = true,},
+	status = 'beneficial',
+	parameters = {project = 10,},
+	activate = function(self, eff)
+		self:autoTemporaryValues(eff, {
+				melee_project = {MIND = eff.project,},
+				ranged_project = {MIND = eff.project,},})
+		end,
+	deactivate = function(self, eff) return true end,}
