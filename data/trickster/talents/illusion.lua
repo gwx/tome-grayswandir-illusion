@@ -62,7 +62,7 @@ newTalent {
 				local actor = game.level.map(x, y, Map.ACTOR)
 				if not actor then return end
 				if actor:canBe 'blind' then
-					actor:setEffect('EFF_GRAYSWANDIR_MENTAL_BLINDED', duration, {
+					actor:setEffect('EFF_GRAYSWANDIR_ILLUSION_BLINDED', duration, {
 							src = self,
 							apply_power = apply,})
 					end

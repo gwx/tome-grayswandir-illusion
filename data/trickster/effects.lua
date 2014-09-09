@@ -15,7 +15,7 @@
 
 
 newEffect{
-	name = 'GRAYSWANDIR_MENTAL_BLINDED', image = 'talents/grayswandir_darkness.png',
+	name = 'GRAYSWANDIR_ILLUSION_BLINDED', image = 'talents/grayswandir_darkness.png',
 	desc = 'Blinded by Illusion',
 	long_desc = function(self, eff) return 'The target is blinded, unable to see anything.' end,
 	type = 'mental',
