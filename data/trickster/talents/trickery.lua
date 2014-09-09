@@ -111,3 +111,35 @@ newTalent {
 			:format(get(t.duration, self, t),
 				self:damDesc('MIND', get(t.project, self, t)))
 		end,}
+
+newTalent {
+	name = 'Chaos Channel', short_name = 'GRAYSWANDIR_CHAOS_CHANNEL',
+	type = {'psionic/trickery', 4,},
+	points = 5,
+	require = make_require(4),
+	cooldown = 34,
+	psi = 22,
+	tactical = {ATTACK = 3, DEBUFF = 3,},
+	range = 1,
+	target = function(self, t) return {type = 'hit', range = get(t.range, self, t),} end,
+	damage_mult = function(self, t) return self:scale {low = 0.3, high = 0.7, t,} end,
+	duration = function(self, t) return self:scale {low = 5, high = 8, t, after = 'floor',} end,
+	mindsave = function(self, t) return self:scale {low = 5, high = 70, t, 'cun',} end,
+	action = function(self, t)
+		local tg = get(t.target, self, t)
+		local x, y, actor = self:getTarget(tg)
+		if not x or not y or not actor then return end
+		if core.fov.distance(self.x, self.y, x, y) > tg.range then return end
+
+		if self:attackTarget(actor, nil, get(t.damage_mult, self, t)) then
+			actor:setEffect('EFF_GRAYSWANDIR_CHAOS_CHANNEL', get(t.duration, self, t), {temps = {
+						combat_mentalresist = -get(t.mindsave, self, t),},})
+			end
+
+		return true end,
+	info = function(self, t)
+		return ([[Do a melee attack for %d%% #SLATE#[*]#LAST# damage. If it hits, you channel raw psychic energy into them, reducing their mind save by %d #SLATE#[*, cun]#LAST# for %d #SLATE#[*]#LAST# turns.]])
+			:format(get(t.damage_mult, self, t) * 100,
+				get(t.mindsave, self, t),
+				get(t.duration, self, t))
+		end,}

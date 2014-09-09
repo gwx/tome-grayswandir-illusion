@@ -84,3 +84,17 @@ newEffect{
 				ranged_project = {MIND = eff.project,},})
 		end,
 	deactivate = function(self, eff) return true end,}
+
+newEffect{
+	name = 'GRAYSWANDIR_CHAOS_CHANNEL', image = 'talents/grayswandir_chaos_channel.png',
+	desc = 'Chaos Channel',
+	long_desc = function(self, eff)
+		return ('The target\'s mind has been shocked by raw psychic energy, reducing its mind save by %d.')
+			:format(-eff.temps.combat_mentalresist)
+		end,
+	type = 'mental',
+	subtype = {psi = true,},
+	status = 'detrimental',
+	parameters = {},
+	activate = function(self, eff) self:autoTemporaryValues(eff) end,
+	deactivate = function(self, eff) return true end,}
