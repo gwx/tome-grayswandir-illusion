@@ -42,7 +42,7 @@ newBirthDescriptor {
 		['cunning/dirty'] = {false, 0.1,},
 		['cunning/trapping'] = {false, 0.1},
 		-- Generic
-		['psionic/mentalism'] = {true, 0.2,},
+		['psionic/mentalism'] = {true, 0.1,},
 		['psionic/illusion'] = {true, 0.3,},
 		['technique/combat-training'] = {true, 0.2},
 		['cunning/survival'] = {true, 0.2},
