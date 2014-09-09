@@ -35,9 +35,7 @@ newBirthDescriptor {
 	talents_types = {
 		-- Class
 		['technique/dualweapon-attack'] = {true, 0.1},
-		['technique/dualweapon-treaning'] = {true, 0.1},
 		['cunning/lethality'] = {true, 0.3,},
-		--['psionic/slumber'] = {true, 0.1,},
 		['psionic/antiperception'] = {true, 0.3,},
 		['psionic/trickery'] = {true, 0.3,},
 		-- Locked Class
