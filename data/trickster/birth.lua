@@ -46,11 +46,10 @@ newBirthDescriptor {
 		-- Generic
 		['psionic/mentalism'] = {true, 0.2,},
 		['psionic/illusion'] = {true, 0.3,},
-		['technique/field-control'] = {true, 0.2},
 		['technique/combat-training'] = {true, 0.2},
 		['cunning/survival'] = {true, 0.2},
 		-- Locked Generic
-		['psionic/dreaming'] = {false, 0.2},},
+		['technique/field-control'] = {false, 0.2},},
 	talents = {
 		-- Class
 		T_GRAYSWANDIR_ANTIPERCEPTION = 1,
