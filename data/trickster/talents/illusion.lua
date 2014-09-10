@@ -240,6 +240,7 @@ newTalent {
 				summoner = self, summoner_gain_exp = true, summon_time = duration,
 				autolevel = 'none', level_range = {1, 1,}, exp_worth = 0,
 				ai = 'summoned', ai_real = 'dumb_talented',
+				attackTarget = function() return end,
 				never_move = 1,
 				power = power,
 				x = x, y = y,
@@ -258,6 +259,7 @@ newTalent {
 				confusion_immune = 1,
 				inc_damage = table.clone(self.inc_damage),
 				on_die = function(self)
+					if not self.summon_time or self.summon_time <= 0 then return end
 					local tg = {type = 'ball', range = 0, friendlyfire = false, radius = self.radius,}
 					game.level.map:particleEmitter(self.x, self.y, tg.radius, 'generic_blast', {
 							radius = tg.radius,
