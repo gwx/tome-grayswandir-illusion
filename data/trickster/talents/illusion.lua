@@ -182,7 +182,7 @@ newTalent {
 	type = {'psionic/illusion', 3,},
 	points = 5,
 	require = make_require(3),
-	range = 4,
+	range = 3,
 	psi_per = function(self, t)
 		return 0.08 * (100 + 2 * self:combatFatigue()) end,
 	requires_target = true,
@@ -239,7 +239,7 @@ newTalent {
 				summoner = self, summoner_gain_exp = true, summon_time = duration,
 				autolevel = 'none', level_range = {1, 1,}, exp_worth = 0,
 				ai = 'summoned', ai_real = 'dumb_talented',
-				attackTarget = function() return end,
+				attackTarget = function() end,
 				never_move = 1,
 				power = power,
 				x = x, y = y,
