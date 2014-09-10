@@ -176,3 +176,113 @@ newTalent {
 				get(t.duration, self, t),
 				get(t.psi_per, self, t))
 		end,}
+
+newTalent {
+	name = 'Illusory Army', short_name = 'GRAYSWANDIR_ILLUSORY_ARMY',
+	type = {'psionic/illusion', 3,},
+	points = 5,
+	require = make_require(3),
+	range = 4,
+	psi_per = function(self, t)
+		return 0.08 * (100 + 2 * self:combatFatigue()) end,
+	requires_target = true,
+	no_npc_use = true,
+	cooldown = 30,
+	count = function(self, t)
+		return self:scale {low = 2, high = 6, t, after = 'floor',}
+		end,
+	target = function(self, t)
+		return {type = 'hit', nolock = true, nowarning = true, range = get(t.range, self, t),}
+		end,
+	duration = function(self, t)
+		return self:scale {low = 6, high = 12, t, after = 'floor',}
+		end,
+	damage = function(self, t)
+		return self:scale {low = 10, high = 80, t, 'mind', after = 'damage',}
+		end,
+	radius = function(self, t)
+		return self:scale {low = 1, high = 2.6, t, after = 'floor',} end,
+	action = function(self, t)
+		local NPC = require 'mod.class.NPC'
+		local damage = get(t.damage, self, t)
+		local duration = get(t.duration, self, t)
+		local radius = get(t.radius, self, t)
+		local power = self:combatMindpower()
+
+		local count = get(t.count, self, t)
+		local psi_per = get(t.psi_per, self, t)
+		count = math.min(count, math.floor(self:getPsi() / psi_per))
+		for i = 1, count do
+			local _, x, y
+			local valid
+			while not valid do
+				local tg = get(t.target, self, t)
+				x, y = self:getTarget(tg)
+				if not x or not y then return i > 1 end
+				_, x, y = self:canProject(tg, x, y)
+
+				if game.level.map(x, y, Map.ACTOR) then
+					game.logPlayer(self, 'Invalid Selection.')
+				else
+					self:incPsi(-psi_per)
+					valid = true
+					end
+				end
+
+			local illusion = NPC.new {
+				name = 'Illusory Decoy',
+				type = 'illusion', subtype = 'ghost',
+				color = colors.YELLOW,
+				image = 'npc/lure.png', shader = 'shadow_simulacrum',
+				shader_args = {color = {0.8, 0.8, 0.8,}, base = 0.8, time_factor = 4000,},
+				display = self.display, color = colors.YELLOW,
+				faction = self.faction,
+				summoner = self, summoner_gain_exp = true, summon_time = duration,
+				autolevel = 'none', level_range = {1, 1,}, exp_worth = 0,
+				ai = 'summoned', ai_real = 'dumb_talented',
+				never_move = 1,
+				power = power,
+				x = x, y = y,
+				max_life = 1, life_rating = 0,
+				radius = radius,
+				damage_mindpower = power,
+				damage = damage,
+				levitation = 1,
+				no_breath = 1,
+				poison_immune = 1,
+				cut_immune = 1,
+				disease_immune = 1,
+				stun_immune = 1,
+				blind_immune = 1,
+				knockback_immune = 1,
+				confusion_immune = 1,
+				inc_damage = table.clone(self.inc_damage),
+				on_die = function(self)
+					local tg = {type = 'ball', range = 0, friendlyfire = false, radius = self.radius,}
+					game.level.map:particleEmitter(self.x, self.y, tg.radius, 'generic_blast', {
+							radius = tg.radius,
+							rm = 130, rM = 230,
+							gm = 10, gM = 110,
+							bm = 70, bM = 170,
+							am = 150, aM = 255,})
+					game:playSoundNear(self, 'talents/echo')
+					self:project(tg, self.x, self.y, 'GRAYSWANDIR_ILLUSION', {
+							dam = self.damage,
+							power = 'damage_mindpower',})
+					end,}
+			illusion:resolve() illusion:resolve(nil, true)
+			game.level:addEntity(illusion)
+			game.zone:addEntity(game.level, illusion, 'actor', x, y)
+			game.level.map:particleEmitter(x, y, 1, 'summon')
+			end
+		return true
+		end,
+	info = function(self, t)
+		return ([[Place up to %d #SLATE#[*]#LAST# decoys within %d spaces, lasting for %d #SLATE#[*]#LAST# turns. Upon dying, they will explode, dealing %d #FFFF44#illusion#LAST# damage in radius %d #SLATE#[*]#LAST#. Each decoy will cost #7FFFD4#%.1f psi#LAST#.]])
+			:format(get(t.count, self, t),
+				get(t.range, self, t),
+				get(t.duration, self, t),
+				self:damDesc('MIND', get(t.damage, self, t)),
+				get(t.radius, self, t),
+				get(t.psi_per, self, t))
+		end,}
