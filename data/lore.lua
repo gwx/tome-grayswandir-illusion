@@ -17,13 +17,17 @@
 newLore {
 	id = 'grayswandir-illusion-intro',
 	category = 'start',
-	name = 'Gray\'s Illusion Pack Notes',
+	name = 'Gray\'s Illusions Notes',
 	start = true,
 	always_pop = true,
 	lore = [[
 #{bold}#Illusory Woods#{normal}#
 New area near Zigur. Recommended level is 18.
+Useful Stuff to have: High mental save, a mental status clear, some sort of tracking method.
 
 #{bold}#Antiperception#{normal}#
 Certain creatures have #{italic}#antiperception#{normal}#, which causes them to either be invisible or look like something else entirely. Antiperception power is generally equal to mindpower, but can be higher or lower based on other attributes. It is resisted with mind save. Taking damage from something with #{italic}#antiperception#{normal}# will give you a temporary 'memory' bonus, decreasing their effective antiperception power for you by (your rank * % life lost).
+
+#{bold}#Illusion Damage Type#{normal}#
+Like mind damage, but on a succesful save deals no damage instead of half.
 ]],}
