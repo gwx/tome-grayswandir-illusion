@@ -22,26 +22,3 @@ function table.set_index(t, index)
 		setmetatable(t, meta) end
 	meta.__index = index
 	end
-
-
--- Load data file
-function util.load_dir(dir, mode)
-		for _, file in ipairs(fs.list(dir)) do
-			local full = dir .. file
-			if fs.isdir(full) then
-				full = full .. '/'
-				if file == 'birth' then mode = 'birth'
-				elseif file == 'talents' then mode = 'talent'
-				elseif file == 'effects' then mode = 'effect'
-					end
-				util.load_dir(full, mode)
-			else
-				if mode == 'birth' or (not mode and file == 'birth.lua') then
-					require('engine.Birther'):loadDefinition(full)
-				elseif mode == 'talent' or (not mode and file == 'talents.lua') then
-					require('engine.interface.ActorTalents'):loadDefinition(full)
-				elseif mode == 'effect' or (not mode and file == 'effects.lua') then
-					require('engine.interface.ActorTemporaryEffects'):loadDefinition(full)
-					end
-				end
-			end end
