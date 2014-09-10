@@ -200,8 +200,7 @@ newTalent {
 	damage = function(self, t)
 		return self:scale {low = 10, high = 80, t, 'mind', after = 'damage',}
 		end,
-	radius = function(self, t)
-		return self:scale {low = 1, high = 2.6, t, after = 'floor',} end,
+	radius = 1,
 	action = function(self, t)
 		local NPC = require 'mod.class.NPC'
 		local damage = get(t.damage, self, t)
@@ -280,7 +279,7 @@ newTalent {
 		return true
 		end,
 	info = function(self, t)
-		return ([[Place up to %d #SLATE#[*]#LAST# decoys within %d spaces, lasting for %d #SLATE#[*]#LAST# turns. Upon dying, they will explode, dealing %d #FFFF44#illusion#LAST# damage in radius %d #SLATE#[*]#LAST#. Each decoy will cost #7FFFD4#%.1f psi#LAST#.]])
+		return ([[Place up to %d #SLATE#[*]#LAST# decoys within %d spaces, lasting for %d #SLATE#[*]#LAST# turns. Upon dying, they will explode, dealing %d #FFFF44#illusion#LAST# damage in radius %d. Each decoy will cost #7FFFD4#%.1f psi#LAST#.]])
 			:format(get(t.count, self, t),
 				get(t.range, self, t),
 				get(t.duration, self, t),
