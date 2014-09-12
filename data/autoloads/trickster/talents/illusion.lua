@@ -110,6 +110,7 @@ newTalent {
 		local count = get(t.count, self, t)
 		local psi_per = get(t.psi_per, self, t)
 		count = math.min(count, math.floor(self:getPsi() / psi_per))
+		if count == 0 then return end
 		for i = 1, count do
 			local _, x, y
 			local valid
@@ -184,7 +185,7 @@ newTalent {
 	require = make_require(3),
 	range = 3,
 	psi_per = function(self, t)
-		return 0.08 * (100 + 2 * self:combatFatigue()) end,
+		return 0.05 * (100 + 2 * self:combatFatigue()) end,
 	requires_target = true,
 	no_npc_use = true,
 	cooldown = 30,
@@ -211,6 +212,7 @@ newTalent {
 		local count = get(t.count, self, t)
 		local psi_per = get(t.psi_per, self, t)
 		count = math.min(count, math.floor(self:getPsi() / psi_per))
+		if count == 0 then return end
 		for i = 1, count do
 			local _, x, y
 			local valid
