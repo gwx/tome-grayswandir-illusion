@@ -198,3 +198,119 @@ newTalent {
 				get(t.range, self, t),
 				get(t.radius, self, t))
 		end,}
+
+newTalent {
+	name = 'Figments', short_name = 'GRAYSWANDIR_FIGMENTS',
+	type = {'psionic/mind-games', 4,},
+	points = 5,
+	require = make_require(4),
+	psi = 15,
+	cooldown = 26,
+	tactical = {DEBUFF = 1,},
+	radius = 3,
+	range = function(self, t)
+		return math.max(0, self:scale {low = -5, high = 3, after = 'floor', t})
+		end,
+	target = function(self, t)
+		return {type = 'ball', nowarning = true,
+			radius = get(t.radius, self, t),
+			range = get(t.range, self, t),}
+		end,
+	count = function(self, t)
+		return self:scale {low = 2, high = 4, t, after = 'floor',}
+		end,
+	duration = 7,
+	damage = function(self, t) return self:scale {low = 10, high = 70, t, 'mind', after = 'damage', synergy = 0.9,} end,
+	confuse = function(self, t) return self:scale {low = 15, high = 35, t,} end,
+	psi_conversion = function(self, t) return self:scale {low = 30, high = 10, limit = 1, t,} end,
+	confuse_dur = 3,
+	action = function(self, t)
+		local tg = get(t.target, self, t)
+		local x, y
+		if tg.range > 0 then
+			x, y = self:getTarget(tg)
+		else
+			x, y = self.x, self.y end
+		if not x or not y then return end
+
+		local NPC = require 'mod.class.NPC'
+		local damage = get(t.damage, self, t)
+		local count = get(t.count, self, t)
+		local confuse = get(t.confuse, self, t)
+		local confuse_dur = get(t.confuse_dur, self, t)
+		local duration = get(t.duration, self, t)
+		local power = self:combatMindpower()
+		local psi_conversion = get(t.psi_conversion, self, t)
+
+		local summoned
+		for i = 1, count do
+			local sx, sy = util.findFreeGrid(x, y, tg.radius, true, {[Map.ACTOR] = true,})
+			if not sx or not sy then break end
+
+			local figment = NPC.new {
+				name = 'Figment',
+				type = 'illusion', subtype = 'canine',
+				image = 'npc/canine_fox.png', shader = 'shadow_simulacrum',
+				shader_args = {color = {0.8, 0.8, 0.8,}, base = 0.8, time_factor = 4000,},
+				display = 'C', color = colors.WHITE,
+				faction = self.faction,
+				summoner = self, summoner_gain_exp = true, summon_time = duration,
+				autolevel = 'none', level_range = {1, 1,}, exp_worth = 0,
+				ai = 'summoned', ai_real = 'dumb_talented_simple',
+				ai_state = {tactic_leash = 100,},
+				special = {
+					damage = damage,
+					confuse = confuse,
+					confuse_dur = confuse_dur,
+					psi_conversion = psi_conversion * -0.01,
+					power = power,},
+				attackTarget = function(self, target)
+					self:project({}, target.x, target.y, 'GRAYSWANDIR_ILLUSION', self.special.damage)
+					if target:canBe 'confuse' then
+						target:setEffect('EFF_CONFUSED', self.special.confuse_dur, {
+								src = self,
+								power = self.special.confuse,
+								apply_power = self.special.power,})
+						end
+					return true
+					end,
+				takeHit = function(self, value, src, death_note)
+					if not self.summoner or not self.summoner.incPsi then return false, value end
+					self.summoner:incPsi(self.special.psi_conversion * value)
+					return false, value
+					end,
+				x = sx, y = sy,
+				max_life = 1, life_rating = 0,
+				levitation = 1,
+				no_breath = 1,
+				poison_immune = 1,
+				cut_immune = 1,
+				disease_immune = 1,
+				stun_immune = 1,
+				blind_immune = 1,
+				knockback_immune = 1,
+				confusion_immune = 1,
+				resists = table.clone(self.resists, true),
+				inc_damage = table.clone(self.inc_damage, true),}
+			figment:resolve() figment:resolve(nil, true)
+			game.level:addEntity(figment)
+			game.zone:addEntity(game.level, figment, 'actor', sx, sy)
+			game.level.map:particleEmitter(sx, sy, 1, 'summon')
+			game:playSoundNear(figment, 'talents/warp')
+
+			summoned = true
+			end
+
+		return summoned
+		end,
+	info = function(self, t)
+		return ([[Create up to %d #SLATE#[*]#LAST# figments randomly within range %d #SLATE#[*]#LAST# radius %d for %d turns. They will harrass your oponents, dealing %d #SLATE#[*, mind]#LAST# #FFFF44#illusion#LAST# damage, and will try to #YELLOW#confuse#LAST# #SLATE#[mind vs. mind, confuse]#LAST# them with %d%% #SLATE#[*]#LAST# power for %d turns. Instead of them taking damage, you will lose %d%% #SLATE#[*]#LAST# as much psi.]])
+			:format(get(t.count, self, t),
+				get(t.range, self, t),
+				get(t.radius, self, t),
+				get(t.duration, self, t),
+				self:damDesc('MIND', get(t.damage, self, t)),
+				get(t.confuse, self, t),
+				get(t.confuse_dur, self, t),
+				get(t.psi_conversion, self, t))
+		end,}
