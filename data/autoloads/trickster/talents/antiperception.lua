@@ -114,3 +114,36 @@ newTalent {
 				get(t.radius, self, t),
 				get(t.memory_mult, self, t) * 100)
 		end,}
+
+newTalent {
+	name = 'Emptiness', short_name = 'GRAYSWANDIR_EMPTINESS',
+	type = {'psionic/antiperception', 3,},
+	points = 5,
+	require = make_require(3),
+	mode = 'sustained',
+	sustain_psi = 30,
+	cooldown = 16,
+	no_energy = true,
+	tactical = {BUFF = 3,},
+	resist = function(self, t) return self:scale {low = 10, high = 25, limit = 35, t,} end,
+	radius = 4,
+	activate = function(self, t) return {} end,
+	deactivate = function(self, t, p) return true end,
+	callbackOnProjectileTarget = function(self, t, x, y, p)
+		if core.fov.distance(self.x, self.y, p.start_x, p.start_y) < get(t.radius, self, t) then return end
+		p.tmp_proj.grayswandir_emptiness_change = -get(t.resist, self, t)
+		end,
+	callbackOnTakeDamage = function(self, t, src, x, y, type, dam, tmp, no_martyr)
+		local ret = {}
+		if tmp and tmp.grayswandir_emptiness_change then
+			ret.dam = dam * (100 + tmp.grayswandir_emptiness_change) * 0.01
+		elseif src and src.x and src.y and
+			core.fov.distance(self.x, self.y, src.x, src.y) >= get(t.radius, self, t)
+		then
+			ret.dam = dam * (100 - get(t.resist, self, t)) * 0.01
+			end
+		return ret end,
+	info = function(self, t)
+		return ([[You manipulate not only perception of yourself, but the very terrain around you. Creatures %d or more spaces away from you cannot see the terrain properly, impeding their ability to even guess your location, causing any damage they deal to you to be reduced by %d%% #SLATE#[*]#LAST#.]])
+			:format(get(t.radius, self, t), get(t.resist, self, t))
+		end,}
