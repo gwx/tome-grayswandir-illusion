@@ -63,7 +63,7 @@ newTalent {
 	points = 5,
 	require = make_require(2),
 	mode = 'passive',
-	mindpower = function(self, t) return self:scale {low = 5, high = 30, t, 'cun',} end,
+	mindpower = function(self, t) return self:scale {low = 5, high = 23, t, 'cun',} end,
 	max_stacks = 4,
 	duration = function(self, t) return self:scale {low = 2, high = 3, t, after = 'floor',} end,
 	onFeed = function(self, t)
