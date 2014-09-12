@@ -65,7 +65,11 @@ util.add_superload('mod.class.Actor', function(_M)
 				mtable = {}
 				self.psi_stealth_damage = mtable end
 			local memory = mtable[source] or 0
+			local old_memory = memory
 			memory = (memory * (mult or 1)) + (add or 0)
+			if source.memory_resist then
+				memory = old_memory + 100 * (memory - old_memory) / (100 + source.memory_resist)
+				end
 			if memory > 1 then memory = 1 end
 			if memory <= 0 then memory = nil end
 			mtable[source] = memory

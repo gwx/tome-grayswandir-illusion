@@ -147,3 +147,22 @@ newTalent {
 		return ([[You manipulate not only perception of yourself, but the very terrain around you. Creatures %d or more spaces away from you cannot see the terrain properly, impeding their ability to even guess your location, causing any damage they deal to you to be reduced by %d%% #SLATE#[*]#LAST#.]])
 			:format(get(t.radius, self, t), get(t.resist, self, t))
 		end,}
+
+newTalent {
+	name = 'Perfect Shadow', short_name = 'GRAYSWANDIR_PERFECT_SHADOW',
+	type = {'psionic/antiperception', 4,},
+	points = 5,
+	require = make_require(4),
+	mode = 'passive',
+	memory_resist = function(self, t) return self:scale {low = 10, high = 80, t,} end,
+	activate = function(self, t)
+		local p = {}
+		self:autoTemporaryValues(p, {
+				memory_resist = get(t.memory_resist, self, t),})
+		return p
+		end,
+	deactivate = function(self, t, p) return true end,
+	info = function(self, t)
+		return ([[Fading from view has become second nature to you. Any memory bonus you give is reduced by %d%%.]])
+			:format(100 - 100 * (100 / (100 + get(t.memory_resist, self, t))))
+		end,}
