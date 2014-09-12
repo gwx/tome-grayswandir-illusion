@@ -205,7 +205,7 @@ newTalent {
 	points = 5,
 	require = make_require(4),
 	psi = 15,
-	cooldown = 26,
+	cooldown = 18,
 	tactical = {DEBUFF = 1,},
 	radius = 3,
 	range = function(self, t)
@@ -216,13 +216,11 @@ newTalent {
 			radius = get(t.radius, self, t),
 			range = get(t.range, self, t),}
 		end,
-	count = function(self, t)
-		return self:scale {low = 2, high = 4, t, after = 'floor',}
-		end,
+	count = 3,
 	duration = 7,
-	damage = function(self, t) return self:scale {low = 10, high = 70, t, 'mind', after = 'damage', synergy = 0.9,} end,
+	damage = function(self, t) return self:scale {low = 10, high = 70, 'mind', after = 'damage', curve = 1,} end,
 	confuse = function(self, t) return self:scale {low = 15, high = 35, t,} end,
-	psi_conversion = function(self, t) return self:scale {low = 30, high = 10, limit = 1, t,} end,
+	psi_conversion = function(self, t) return self:scale {low = 30, high = 20, limit = 10, t,} end,
 	confuse_dur = 3,
 	action = function(self, t)
 		local tg = get(t.target, self, t)
@@ -304,7 +302,7 @@ newTalent {
 		return summoned
 		end,
 	info = function(self, t)
-		return ([[Create up to %d #SLATE#[*]#LAST# figments randomly within range %d #SLATE#[*]#LAST# radius %d for %d turns. They will harrass your oponents, dealing %d #SLATE#[*, mind]#LAST# #FFFF44#illusion#LAST# damage, and will try to #YELLOW#confuse#LAST# #SLATE#[mind vs. mind, confuse]#LAST# them with %d%% #SLATE#[*]#LAST# power for %d turns. Instead of them taking damage, you will lose %d%% #SLATE#[*]#LAST# as much psi.]])
+		return ([[Create up to %d #SLATE#[*]#LAST# figments randomly within range %d #SLATE#[*]#LAST# radius %d for %d turns. They will harrass your oponents, dealing %d #SLATE#[mind]#LAST# #FFFF44#illusion#LAST# damage, and will try to #YELLOW#confuse#LAST# #SLATE#[mind vs. mind, confuse]#LAST# them with %d%% #SLATE#[*]#LAST# power for %d turns. Instead of them taking damage, you will lose %d%% #SLATE#[*]#LAST# as much psi.]])
 			:format(get(t.count, self, t),
 				get(t.range, self, t),
 				get(t.radius, self, t),
