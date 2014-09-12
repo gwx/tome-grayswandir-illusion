@@ -63,7 +63,7 @@ newTalent {
 	points = 5,
 	require = make_require(2),
 	mode = 'passive',
-	mindpower = function(self, t) return self:scale {low = 5, high = 23, t, 'cun',} end,
+	mindpower = function(self, t) return self:scale {low = 5, high = 25, t, 'cun', synergy = 0.9,} end,
 	max_stacks = 4,
 	duration = function(self, t) return self:scale {low = 2, high = 3, t, after = 'floor',} end,
 	onFeed = function(self, t)
@@ -119,12 +119,12 @@ newTalent {
 	require = make_require(4),
 	cooldown = 34,
 	psi = 22,
-	tactical = {ATTACK = 3, DEBUFF = 3,},
+	tactical = {ATTACK = 3, DISABLE = 3,},
 	range = 1,
 	target = function(self, t) return {type = 'hit', range = get(t.range, self, t),} end,
 	damage_mult = function(self, t) return self:scale {low = 0.3, high = 0.7, t,} end,
 	duration = function(self, t) return self:scale {low = 5, high = 8, t, after = 'floor',} end,
-	mindsave = function(self, t) return self:scale {low = 5, high = 70, t, 'cun',} end,
+	mindsave = function(self, t) return self:scale {low = 5, high = 70, t, 'cun', synergy = 0.9,} end,
 	action = function(self, t)
 		local tg = get(t.target, self, t)
 		local x, y, actor = self:getTarget(tg)
