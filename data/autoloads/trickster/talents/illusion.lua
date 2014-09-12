@@ -287,3 +287,37 @@ newTalent {
 				get(t.radius, self, t),
 				get(t.psi_per, self, t))
 		end,}
+
+newTalent {
+	name = 'Mirror Image', short_name = 'GRAYSWANDIR_MIRROR_IMAGE',
+	type = {'psionic/illusion', 4,},
+	points = 5,
+	require = make_require(4),
+	mode = 'sustained',
+	sustain_psi = 30,
+	cooldown = 24,
+	no_energy = true,
+	tactical = {BUFF = 3,},
+	chance = function(self, t) return self:scale {low = 10, high = 30, t} end,
+	radius = function(self, t) return self:scale {low = 2, high = 4, t, after = 'floor',} end,
+	target = function(self, t) return {type = 'ball', range = 0, radius = get(t.radius, self, t),} end,
+	activate = function(self, t) return true end,
+	deactivate = function(self, t) return true end,
+	callbackOnPositionSeen = function(self, t, src, pos)
+		if not rng.percent(get(t.chance, self, t)) then return end
+		local summons = {}
+		self:project(get(t.target, self, t), self.x, self.y, function(x, y)
+				local actor = game.level.map(x, y, Map.ACTOR)
+				if actor and actor.summoner == self then table.insert(summons, actor) end
+				end)
+		if #summons == 0 then return end
+		local summon = get(summons)
+		local distance = core.fov.distance(self.x, self.y, pos.x, pos.y)
+		if core.fov.distance(self.x, self.y, summon.x, summon.y) < distance then return end
+		pos.x = summon.x
+		pos.y = summon.y
+		end,
+	info = function(self, t)
+		return ([[Your nearby summons now look like you to your enemies' eyes. Whenever an enemy targets you they have a %d%% #SLATE#[*]#LAST# chance to instead target one of your summons within radius %d #SLATE#[*]#LAST#. This will never move their target closer to you than it already is #SLATE#(eg. if you're also stealthed)#LAST#]])
+			:format(get(t.chance, self, t), get(t.radius, self, t))
+		end,}

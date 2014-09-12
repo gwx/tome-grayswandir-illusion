@@ -28,13 +28,13 @@ newDamageType {
     if 'table' ~= _G.type(params) then params = {dam = params} end
 		local dam = params.dam or 10
 		local power = params.power or 'combatMindpower'
-		power = get(src[power], src)
+		if 'number' ~= _G.type(power) then power = get(src[power], src) end
 		local save = params.save or 'combatMentalResist'
-		save = get(target[save], target)
+		if 'number' ~= _G.type(save) then save = get(target[save], target) end
 
 		if not target:checkHit(power, save, 0, 95, 15) then
 			game.logSeen(target, '%s disbelieves the #FFFF44#illusion#LAST# damage!', target.name:capitalize())
 			return 0 end
 
-		return DamageType.defaultProjector(src, x, y, type, dam)
+		return DamageType.defaultProjector(src, x, y, 'MIND', dam)
 		end,}
