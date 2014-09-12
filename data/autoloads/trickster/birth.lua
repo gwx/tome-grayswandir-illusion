@@ -38,6 +38,7 @@ newBirthDescriptor {
 		['cunning/lethality'] = {true, 0.3,},
 		['psionic/antiperception'] = {true, 0.3,},
 		['psionic/trickery'] = {true, 0.3,},
+		['psionic/mind-games'] = {true, 0.3,},
 		-- Locked Class
 		['cunning/dirty'] = {false, 0.1,},
 		['cunning/trapping'] = {false, 0.1},

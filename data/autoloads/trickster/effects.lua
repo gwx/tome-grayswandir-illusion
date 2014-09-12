@@ -14,7 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-newEffect{
+newEffect {
 	name = 'GRAYSWANDIR_ILLUSION_BLINDED', image = 'talents/grayswandir_darkness.png',
 	desc = 'Blinded by Illusion',
 	long_desc = function(self, eff) return 'The target is blinded, unable to see anything.' end,
@@ -39,7 +39,69 @@ newEffect{
 				end
 		end,}
 
-newEffect{
+newEffect {
+	name = 'GRAYSWANDIR_ILLUSION_DAZED', image = 'talents/grayswandir_sensory_overload.png',
+	desc = 'Dazed by Illusion',
+	long_desc = function(self, eff) return 'The target is dazed, rendering it unable to move, halving all damage done, defense, saves, accuracy, spell, mind and physical power. Any damage will remove the daze.' end,
+	type = 'mental',
+	subtype = {stun = true, illusion = true,},
+	status = 'detrimental',
+	parameters = {},
+	on_gain = function(self, eff) return '#Target# is dazed!', '+Dazed' end,
+	on_lose = function(self, eff) return '#Target# is not dazed anymore.', '-Dazed' end,
+	callbackOnHit = function(self, eff) self:removeEffect 'EFF_GRAYSWANDIR_ILLUSION_DAZED' end,
+	activate = function(self, eff)
+		self:autoTemporaryValues(eff, {
+				dazed = 1,
+				never_move = 1,})
+		end,
+	deactivate = function(self, eff) end,}
+
+newEffect {
+	name = 'GRAYSWANDIR_DELUSION_SHACKLES', image = 'talents/grayswandir_delusion_shackles.png',
+	desc = 'Delusion: Shackles',
+	long_desc = function(self, eff)
+		return ('The target is bound with illusory shackles visible only to themselves, reducing movement, combat, and spell speeds by %d%%.')
+			:format(eff.speed_loss * 100)
+		end,
+	type = 'mental',
+	subtype = {slow = true, illusion = true,},
+	status = 'detrimental',
+	parameters = {speed_loss = 0.1,},
+	on_gain = function(self, eff) return '#Target# is delusional!', '+Shackles' end,
+	on_lose = function(self, eff) return '#Target# is not delusional anymore.', '-Shackles' end,
+	activate = function(self, eff)
+		self:autoTemporaryValues(eff, {
+				combat_physspeed = -eff.speed_loss,
+				combat_spellspeed = -eff.speed_loss,
+				movement_speed = -eff.speed_loss,})
+		end,
+	deactivate = function(self, eff) end,}
+
+newEffect {
+	name = 'GRAYSWANDIR_DELUSION_HOUNDED', image = 'talents/grayswandir_delusion_hounded.png',
+	desc = 'Delusion: Hounded',
+	long_desc = function(self, eff)
+		return ('The target is harrassed by invisible assailants, reducing Dexterity and Cunning by %d, and are %d%% more likely to be hit by physical criticals.')
+			:format(eff.stat_loss, eff.crit_chance)
+		end,
+	type = 'mental',
+	subtype = {illusion = true,},
+	status = 'detrimental',
+	parameters = {stat_loss = 10, crit_chance = 10,},
+	on_gain = function(self, eff) return '#Target# is delusional!', '+Hounded' end,
+	on_lose = function(self, eff) return '#Target# is not delusional anymore.', '-Hounded' end,
+	activate = function(self, eff)
+		local Stats = require 'engine.interface.ActorStats'
+		self:autoTemporaryValues(eff, {
+				inc_stats = {
+					[Stats.STAT_DEX] = -eff.stat_loss,
+					[Stats.STAT_CUN] = -eff.stat_loss,},
+				combat_crit_vulnerable = eff.crit_chance,})
+		end,
+	deactivate = function(self, eff) end,}
+
+newEffect {
 	name = 'GRAYSWANDIR_CHAOS_CASCADE', image = 'talents/grayswandir_chaos_cascade.png',
 	desc = 'Chaos Cascade',
 	long_desc = function(self, eff)
@@ -67,7 +129,7 @@ newEffect{
 		return old
 		end,}
 
-newEffect{
+newEffect {
 	name = 'GRAYSWANDIR_PANDEMONIUM', image = 'talents/grayswandir_pandemonium.png',
 	desc = 'Pandemonium',
 	long_desc = function(self, eff)
@@ -85,7 +147,7 @@ newEffect{
 		end,
 	deactivate = function(self, eff) return true end,}
 
-newEffect{
+newEffect {
 	name = 'GRAYSWANDIR_CHAOS_CHANNEL', image = 'talents/grayswandir_chaos_channel.png',
 	desc = 'Chaos Channel',
 	long_desc = function(self, eff)
