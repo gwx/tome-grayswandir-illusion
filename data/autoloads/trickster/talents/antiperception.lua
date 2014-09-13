@@ -129,7 +129,8 @@ newTalent {
 	radius = 4,
 	activate = function(self, t) return {} end,
 	deactivate = function(self, t, p) return true end,
-	callbackOnProjectileTarget = function(self, t, x, y, p)
+	callbackOnProjectileTarget = function(self, t, o, x, y, p)
+		if not p or not p.start_x or not p.start_y then return end
 		if core.fov.distance(self.x, self.y, p.start_x, p.start_y) < get(t.radius, self, t) then return end
 		p.tmp_proj.grayswandir_emptiness_change = -get(t.resist, self, t)
 		end,
