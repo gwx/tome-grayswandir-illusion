@@ -16,7 +16,7 @@
 
 defineTile('.', 'GRASS')
 defineTile('#', 'TREE')
-defineTile('P', 'PORTAL')
+defineTile('P', 'GRASS')
 --defineTile('Y', 'FLOOR', nil, 'YEEK_WAYIST')
 
 subGenerator{

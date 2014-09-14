@@ -14,6 +14,8 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+lib.require 'unscale'
+
 util.add_superload('mod.class.interface.Combat', function(_M)
 
 		--- Scale
@@ -69,6 +71,10 @@ util.add_superload('mod.class.interface.Combat', function(_M)
 				elseif x == 'phys' then score = self:combatPhysicalpower()
 				elseif x == 'mind' then score = self:combatMindpower()
 				elseif x == 'spell' then score = self:combatSpellpower()
+				elseif x == 'u.atk' then score = self:unscaleCombatStats(self:combatAttack()) / 3
+				elseif x == 'u.phys' then score = self:unscaleCombatStats(self:combatPhysicalpower()) / 3
+				elseif x == 'u.mind' then score = self:unscaleCombatStats(self:combatMindpower()) / 3
+				elseif x == 'u.spell' then score = self:unscaleCombatStats(self:combatSpellpower()) / 3
 					end
 
 				synergy_score = synergy_score * math.max(0, score) * 0.01

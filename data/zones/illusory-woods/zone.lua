@@ -67,7 +67,15 @@ return {
 		[1] = {
 			generator = {
 				map = {
-					up = 'GRASS_UP_WILDERNESS',},},},},
+					up = 'GRASS_UP_WILDERNESS',},},},
+		--[[ Not working?
+		[4] = {
+			generator = {
+				map = {
+					class = 'engine.generator.map.Static',
+					map = 'grayswandir-illusion+illusory-woods-last',},},},
+		--]]
+		},
 	post_process = function(level)
 		game.state:makeWeather(
 			level, 6, {

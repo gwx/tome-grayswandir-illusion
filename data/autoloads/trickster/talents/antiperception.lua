@@ -40,10 +40,10 @@ newTalent {
 	tactical = {BUFF = 3,},
 	no_break_stealth = true,
 	psi_stealth_mult = function(self, t)
-		return self:scale {low = 0.2, high = 0.5, limit = 0.7, t,}
+		return self:scale {low = 0.3, high = 0.8, limit = 1.2, t,}
 		end,
 	psi_stealth_add = function(self, t)
-		return self:scale {low = 0, high = 20, t,}
+		return self:scale {low = 10, high = 30, t,}
 		end,
 	activate = function(self, t)
 		local p = {}

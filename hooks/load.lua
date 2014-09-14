@@ -91,6 +91,7 @@ if not __additional_superloads then
 				local prev = base
 				base = function(name)
 					prev(name)
+					print("FROM ", name, "loading special!")
 					local _M = package.loaded[name]
 					f(_M)
 					return _M

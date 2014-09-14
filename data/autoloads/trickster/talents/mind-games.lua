@@ -218,7 +218,7 @@ newTalent {
 		end,
 	count = 3,
 	duration = 7,
-	damage = function(self, t) return self:scale {low = 10, high = 70, 'mind', after = 'damage', curve = 1,} end,
+	damage = function(self, t) return self:scale {low = 10, high = 70, 'u.mind', after = 'damage',} end,
 	confuse = function(self, t) return self:scale {low = 15, high = 35, t,} end,
 	psi_conversion = function(self, t) return self:scale {low = 30, high = 20, limit = 10, t,} end,
 	confuse_dur = 3,

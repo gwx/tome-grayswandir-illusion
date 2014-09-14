@@ -65,7 +65,7 @@ newTalent {
 	mode = 'passive',
 	mindpower = function(self, t) return self:scale {low = 5, high = 25, t, 'cun', synergy = 0.9,} end,
 	max_stacks = 4,
-	duration = function(self, t) return self:scale {low = 2, high = 3, t, after = 'floor',} end,
+	duration = function(self, t) return self:scale {low = 2, high = 4, t, after = 'floor',} end,
 	onFeed = function(self, t)
 		self:setEffect('EFF_GRAYSWANDIR_CHAOS_CASCADE', get(t.duration, self, t), {
 				stacks = 1,
@@ -124,7 +124,7 @@ newTalent {
 	target = function(self, t) return {type = 'hit', range = get(t.range, self, t),} end,
 	damage_mult = function(self, t) return self:scale {low = 0.3, high = 0.7, t,} end,
 	duration = function(self, t) return self:scale {low = 5, high = 8, t, after = 'floor',} end,
-	mindsave = function(self, t) return self:scale {low = 5, high = 70, t, 'cun', synergy = 0.9,} end,
+	mindsave = function(self, t) return self:scale {low = 10, high = 70, t, 'cun', synergy = 0.9,} end,
 	action = function(self, t)
 		local tg = get(t.target, self, t)
 		local x, y, actor = self:getTarget(tg)
