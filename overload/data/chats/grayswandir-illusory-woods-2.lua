@@ -14,17 +14,14 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-long_name = 'Gray\'s Illusions'
-short_name = 'grayswandir-illusion'
-for_module = 'tome'
-version = {1,2,3}
-weight = 150
-author = {'grayswandir',}
-homepage = ''
-description = [[Nothing yet.]]
-tags = {'zone', 'level', 'stealth', 'psi', 'forest', 'wood', 'illusion', 'npc', 'enemy', 'contest2014',}
+newChat {
+	id = 'start',
+	text = ([[#VIOLET#%s shimmers, and then rapidly changes form before your eyes.#LAST#
+You fool! Your imbecile! I know your true aim - I will kill you first!]]):format(name),
+	answers = {
+		{'...',
+			action = function(npc, player)
+				continue()
+				end},},}
 
-overload = true
-superload = true
-hooks = true
-data = true
+return 'start'

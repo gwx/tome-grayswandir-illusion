@@ -42,7 +42,7 @@ class:bindHook('ToME:load', function(self, data)
 				eff.damage = (eff.damage or 0) - heal
 				if eff.damage <= 0 then eff.damage = nil end end,
 			activate = function(self, eff)
-				return self:autoTemporaryValues({}, {great_shader = 1,})
+				self:autoTemporaryValues(eff, {great_shader = 1,})
 				end,
 			deactivate = function(self, eff)
 				if eff.damage then
@@ -50,6 +50,7 @@ class:bindHook('ToME:load', function(self, data)
 						self.name:capitalize(), eff.damage)
 					self:takeHit(eff.damage, self)
 					end
+				return true
 				end,
 			on_merge = function(self, old, new)
 				old.damage = (old.damage or 0) + (new.damage or 0)
@@ -135,8 +136,14 @@ util.add_superload('mod.class.Player', function(_M)
 			if not game.fbo_shader then return end
 
 			local pf = game.posteffects or {}
-			if self:attr('great_shader') then
-				game.fbo_shader:setUniform('colorize', {0.9, 0.9, 0.4, 0.6,})
+			if not self:attr 'unstoppable' and not self:attr 'stealth' and
+				not self:attr 'invisible' and not self:attr 'lightning_speed'
+			then
+				if self:attr('great_shader') then
+					game.fbo_shader:setUniform('colorize', {0.6, 0.9, 0.4, 0.6,})
+				else
+					game.fbo_shader:setUniform('colorize', {0.0, 0.0, 0.0, 0.0,})
+					end
 				end
 			end
 		end)

@@ -14,17 +14,12 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-long_name = 'Gray\'s Illusions'
-short_name = 'grayswandir-illusion'
-for_module = 'tome'
-version = {1,2,3}
-weight = 150
-author = {'grayswandir',}
-homepage = ''
-description = [[Nothing yet.]]
-tags = {'zone', 'level', 'stealth', 'psi', 'forest', 'wood', 'illusion', 'npc', 'enemy', 'contest2014',}
-
-overload = true
-superload = true
-hooks = true
-data = true
+newAchievement {
+	name = 'Trickster', id = 'GRAYSWANDIR_TRICKSTER',
+	show = 'full',
+	desc = 'Defeated the Hidden One in the Illusory Woods.',
+	mode = 'world',
+	on_gain = function(_, src, personal)
+		game:setAllowedBuild('psionic')
+		game:setAllowedBuild('grayswandir_trickster', true)
+		end,}

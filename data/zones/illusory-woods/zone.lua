@@ -68,13 +68,11 @@ return {
 			generator = {
 				map = {
 					up = 'GRASS_UP_WILDERNESS',},},},
-		--[[ Not working?
 		[4] = {
 			generator = {
 				map = {
 					class = 'engine.generator.map.Static',
 					map = 'grayswandir-illusion+illusory-woods-last',},},},
-		--]]
 		},
 	post_process = function(level)
 		game.state:makeWeather(
@@ -103,4 +101,8 @@ return {
 	foreground = function(level, x, y, nb_keyframes)
 		if not config.settings.tome.weather_effects or not level.foreground_particle then return end
 		level.foreground_particle.ps:toScreen(x, y, true, 1)
+		end,
+	onPlayerEnter = function()
+		if game.level.level ~= 4 then return end
+		game.player:grantQuest('grayswandir-illusion+illusory-woods')
 		end,}

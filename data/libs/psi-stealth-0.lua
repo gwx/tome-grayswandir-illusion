@@ -38,7 +38,7 @@ util.add_superload('mod.class.Actor', function(_M)
 			if actor == self then return see, chance end
 
 			local psi_stealth = actor.psiStealthPower and actor:psiStealthPower(self)
-			if psi_stealth then
+			if psi_stealth and not (actor.reactionToward and actor:reactionToward(self) > 0) then
 				local hit, psi_chance = self:checkHit(self:combatMentalResist(), psi_stealth)
 				-- Only do mimics if it's the player trying to see them.
 				if self.player and actor:psiStealthMimic() then

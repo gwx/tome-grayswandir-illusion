@@ -17,6 +17,18 @@
 local addon = __loading_addon
 local class = require 'engine.class'
 
+-- Add autolevel loadDefinition.
+util.add_superload('engine.Autolevel', function(_M)
+		function _M:loadDefinition(file, env)
+			local f, err = util.loadfilemods(file, setmetatable(env or {
+						registerScheme = function(t) self:registerScheme(t) end,
+						load = function(f) self:loadDefinition(f, getfenv(2)) end
+						}, {__index=_G}))
+			if not f and err then error(err) end
+			f()
+			end
+		end)
+
 --- Recursively load a directory according to file names.
 function util.load_dir(dir, mode)
 		for _, file in ipairs(fs.list(dir)) do
@@ -29,11 +41,16 @@ function util.load_dir(dir, mode)
 					-- AI is weird and takes a whole directory.
 					do_load = false
 					require('engine.interface.ActorAI'):loadDefinition(full)
+				elseif file == 'achievements' then
+					-- Achievements is weird and takes a whole directory.
+					do_load = false
+					require('engine.interface.WorldAchievements'):loadDefinition(full)
 				elseif file == 'birth' then mode = 'birth'
 				elseif file == 'talents' then mode = 'talent'
 				elseif file == 'effects' then mode = 'effect'
 				elseif file == 'lore' then mode = 'lore'
 				elseif file == 'damage-types' or file == 'damage_types' then mode = 'damage-type'
+				elseif file == 'autolevels' or file == 'autolevel_schemes' then mode = 'damage-type'
 					end
 				if do_load then util.load_dir(full, mode) end
 			else
@@ -49,6 +66,10 @@ function util.load_dir(dir, mode)
 					(not mode and (file == 'damage-types.lua' or file == 'damage_types.lua'))
 				then
 					require('engine.DamageType'):loadDefinition(full)
+				elseif mode == 'autolevels' or
+					(not mode and (file == 'autolevels.lua' or file == 'autolevel_schemes.lua'))
+				then
+					require('engine.Autolevel'):loadDefinition(full)
 					end
 				end
 			end end

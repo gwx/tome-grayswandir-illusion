@@ -24,12 +24,13 @@ load('/data/general/npcs/plant.lua', rarity(1, 7))
 load('/data/general/npcs/ant.lua', rarity(5, 7))
 load('/data/general/npcs/all.lua', rarity(4, 250))
 
-local actor = require 'mod.class.Actor'
 local rm = resolvers.mbonus
 local ravg = resolvers.rngavg
 local rt = resolvers.talents
 local rlev = resolvers.levelup
 local rtalents = resolvers.talents
+
+local Quest = require 'engine.Quest'
 
 newEntity{
 	base = 'BASE_NPC_OOZE',
@@ -105,12 +106,12 @@ newEntity{
 		T_GRAYSWANDIR_LURK = {base = 1, every = 5, max = 8,},
 		T_GRAYSWANDIR_LURKING_STRIKE = {base = 1, every = 7, max = 9,},},
 	make_escort = {
-		{name = 'hidden treant', number = 3, no_subescort = true,},},
+		{name = 'hidden treant', number = 2, no_subescort = true,},},
 	rank = 2,
 	size_category = 5,}
 
 newEntity {
-	base = 'BASE_NPC_CANINE',
+	define_as = 'GRAYSWANDIR_SHADOW_WOLF', base = 'BASE_NPC_CANINE',
 	name = 'shadow wolf', color = colors.DARK_GREY,
 	resolvers.nice_tile {
 		image = 'invis.png', add_mos = {
@@ -152,3 +153,55 @@ newEntity {
 	resolvers.talents {
 		T_EVASION = {base = 2, every = 3, max = 5,},
 		T_GRAYSWANDIR_HOP = {base = 2, every = 5, max = 7,},},}
+
+newEntity {
+	define_as = 'GRAYSWANDIR_HIDDEN_ONE',
+	unique = true,
+	name = 'The Hidden One',
+	faction = 'enemies',
+	type = 'humanoid', subtype = 'human',
+	color = colors.YELLOW, display = 'p', image = 'npc/humanoid_human_shady_cornac_man.png',
+	desc = [[This human seems to shimmer in and out of focus. The only consistent feature you can make out is his malevolent grin..]],
+	level_range = {20, nil}, exp_worth = 2,
+	max_life = 400, life_rating = 15, fixed_rating = true,
+	max_psi = 200,
+	rank = 4,
+	size_category = 3,
+	move_others = true,
+
+	stats = {str = 12, dex = 25, con = 10, cun = 30, wil = 20, mag = 7,},
+	body = {INVEN = 10, MAINHAND = 1, OFFHAND = 1, BODY = 1,},
+
+	instakill_immune = 1,
+	stun_immune = 0.3,
+	blind_immune = 0.4,
+	combat_mentalresist = 50,
+	combat_mindpower = 30,
+
+	resolvers.equip {
+		{type='weapon', subtype='knife', force_drop = true, tome_drops = 'boss', autoreq = true,},
+		{type='weapon', subtype='knife', force_drop = true, tome_drops = 'boss', autoreq = true,},},
+	resolvers.drops {chance = 100, nb = 4, {tome_drops = 'boss',},},
+
+	resolvers.talents {
+		T_KNIFE_MASTERY = {base = 4, every = 8, max = 6,},
+		T_WEAPON_COMBAT = {base = 2, every = 4, max = 5,},
+		T_FLURRY = {base = 1, every = 8, max = 3,},
+		T_GRAYSWANDIR_ANTIPERCEPTION = {base = 4, every = 8, max = 6,},
+		T_GRAYSWANDIR_SENSORY_OVERLOAD = {base = 2, every = 6, max = 4,},
+		T_GRAYSWANDIR_DARKNESS = {base = 3, every = 6, max = 4,},
+		T_GRAYSWANDIR_DELUSION_SHACKLES = {base = 2, every = 5, max = 4,},
+		T_GRAYSWANDIR_DELUSION_HOUNDED = {base = 2, every = 5, max = 4,},
+		T_GRAYSWANDIR_CHAOS_FEED = {base = 4, every = 5, max = 7,},
+		T_GRAYSWANDIR_CHAOS_CASCADE = {base = 2, every = 5, max = 5,},
+		T_GRAYSWANDIR_PANDEMONIUM = {base = 2, every = 8, max = 5,},},
+
+	autolevel = 'trickster',
+	ai = 'tactical', ai_state = {talent_in = 1, ai_move = 'move_astar',},
+	ai_tactic = resolvers.tactic 'melee',
+	resolvers.inscriptions(2, {}),
+
+	on_die = function(self, who)
+		local Quest = require 'engine.Quest'
+		game.player:setQuestStatus('illusory-woods', Quest.DONE)
+		end,}

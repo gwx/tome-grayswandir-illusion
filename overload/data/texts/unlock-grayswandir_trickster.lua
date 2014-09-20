@@ -14,17 +14,12 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-long_name = 'Gray\'s Illusions'
-short_name = 'grayswandir-illusion'
-for_module = 'tome'
-version = {1,2,3}
-weight = 150
-author = {'grayswandir',}
-homepage = ''
-description = [[Nothing yet.]]
-tags = {'zone', 'level', 'stealth', 'psi', 'forest', 'wood', 'illusion', 'npc', 'enemy', 'contest2014',}
+return 'New Class #LIGHT_GREEN#Trickster (Psionic)',
+[[The sly Trickster uses their psionic prowess to manipulate other\'s perception of reality. Not only do are they capable of driving their enemies insane, they gain power from doing so. Then, with their enemies distracted, they sneak up and stab them in the back.
 
-overload = true
-superload = true
-hooks = true
-data = true
+Class features:#YELLOW#
+- Use illusory walls and decoys to distract your enemies.
+- A wide variety of debuffs to that confuse and distract your foes.
+- Turn enemies' confusion into your own power.
+- Convince your enemies that they don't see you, even as you stand in plain sight.
+- Stabbing things.]]

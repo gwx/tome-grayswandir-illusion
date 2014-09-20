@@ -18,6 +18,8 @@ load('/data/general/grids/basic.lua')
 load('/data/general/grids/forest.lua')
 load('/data/general/grids/water.lua')
 
+local Grid = require 'mod.class.Grid'
+
 local grass_editor = {method = 'borders_def', def = 'dark_grass',}
 
 newEntity{
@@ -34,6 +36,19 @@ for i = 1, 14 do
 		base = 'GRASS', define_as = 'GRASS_PATCH'..i,
 		image = ('terrain/grass/dark_grass_main_%02d.png'):format(i),}
 	end
+
+newEntity {
+	define_as = 'PORTAL',
+	type = 'quest', subtype = 'portal',
+	name = 'Recall Portal',
+	show_tooltip = true,
+	display = '&', color = colors.VIOLET,
+	image = 'terrain/grass/dark_grass_main_01.png',
+	add_displays = {class.new {image = 'terrain/maze_teleport.png', z = 8,},},
+	notice = true,
+	always_remember = true,
+	quest_portal = true,
+	desc = 'A recall portal home.',}
 
 local treesdef = {
 	{'oldforest_tree_01', {tall=-1, 'shadow', 'trunk_01', {'foliage_summer_%02d',1,2}}},
