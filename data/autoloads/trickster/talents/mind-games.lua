@@ -42,8 +42,9 @@ newTalent {
 	damage = function(self, t) return self:scale {low = 0, high = 45, t, 'mind', after = 'damage',} end,
 	duration = 2,
 	target = function(self, t)
+		local radius = math.floor(self:mindCrit(get(t.radius, self, t)))
 		return {type = 'ball', friendlyfire = false, nowarning = true,
-			radius = self:mindCrit(get(t.radius, self, t)),
+			radius = radius, nolock = radius > 0,
 			range = get(t.range, self, t),}
 		end,
 	action = function(self, t)
@@ -99,8 +100,9 @@ newTalent {
 	duration = function(self, t) return self:scale {low = 6, high = 10, t, after = 'floor',} end,
 	speed_loss = function(self, t) return self:scale {low = 0.18, high = 0.36, limit = 0.54, t,} end,
 	target = function(self, t)
+		local radius = math.floor(self:mindCrit(get(t.radius, self, t)))
 		return {type = 'ball', friendlyfire = false, nowarning = true,
-			radius = self:mindCrit(get(t.radius, self, t)),
+			radius = radius, nolock = radius > 0,
 			range = get(t.range, self, t),}
 		end,
 	action = function(self, t)
@@ -155,8 +157,9 @@ newTalent {
 	stat_loss = function(self, t) return self:scale {low = 15, high = 60, t, 'cun', after = 'floor',} end,
 	crit_chance = function(self, t) return self:scale {low = 0, high = 30, t,} end,
 	target = function(self, t)
+		local radius = math.floor(self:mindCrit(get(t.radius, self, t)))
 		return {type = 'ball', friendlyfire = false, nowarning = true,
-			radius = self:mindCrit(get(t.radius, self, t)),
+			radius = radius, nolock = radius > 0,
 			range = get(t.range, self, t),}
 		end,
 	action = function(self, t)
