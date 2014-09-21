@@ -27,7 +27,7 @@ newEffect {
 	subtype = {confuse = true,},
 	status = 'detrimental',
 	parameters = {save = 5, confuse = 3, count = 1,},
-	decrease = 0, no_remove = true,
+	decrease = 0,
 	activate = function(self, eff)
 		local src = eff.src
 		eff.src = nil
@@ -51,6 +51,7 @@ newEffect {
 				self:removeTemporaryValue('combat_mentalresist', sub_eff.save_id)
 				end
 			end
+		return true
 		end,
 	callbackOnDeath = function(self, eff)
 		self:removeEffect('EFF_GRAYSWANDIR_MENTAL_PRESSURE', true, true)
