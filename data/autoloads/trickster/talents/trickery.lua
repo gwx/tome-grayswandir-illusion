@@ -34,21 +34,18 @@ newTalent {
 	points = 5,
 	require = make_require(1),
 	mode = 'passive',
-	life_gen = function(self, t)
-		return self:scale {low = 3, high = 16, t, after = 'floor',}
-		end,
-	psi_gen = function(self, t)
-		return self:scale {low = 3, high = 16, t, after = 'floor',}
+	gain = function(self, t)
+		return self:scale {low = 3, high = 15, t, after = 'floor',}
 		end,
 	callbackOnInflictTemporaryEffect = function(self, t, eff_id, e, p)
 		if self.turn_procs.chaos_feed then return end
 		if p.dur == 0 then return end
 		if e.status ~= 'detrimental' or e.type ~= 'mental' then return end
-		local life_gain = get(t.life_gen, self, t)
-		local psi_gain = get(t.psi_gen, self, t)
-		game.logSeen(self, '%s gains %d life and %d psi from Chaos Feed.',
-			self.name:capitalize(), life_gain, psi_gain)
-		self:heal(life_gain)
+		local gain = get(t.gain, self, t)
+		local psi_gain = gain * util.bound((self.healing_factor or 1), 0, 2.5)
+		game.logSeen(self, '%s gains %d #LIGHT_RED#life#LAST# and #7FFFD4#psi#LAST# from Chaos Feed.',
+			self.name:capitalize(), psi_gain)
+		self:heal(gain)
 		self:incPsi(psi_gain)
 		self.turn_procs.chaos_feed = true
 
@@ -57,10 +54,8 @@ newTalent {
 			end
 		end,
 	info = function(self, t)
-		local mult = get(t.psi_stealth_mult, self, t)
-		local add = get(t.psi_stealth_add, self, t)
-		return ([[Feed on the chaos you cause. Every turn you inflict a mental debuff, you gain %d #SLATE#[*]#LAST# #LIGHT_RED#life#LAST# and %d #SLATE#[*]#LAST# #7FFFD4#psi#LAST#.]])
-			:format(get(t.life_gen, self, t), get(t.psi_gen, self, t))
+		return ([[Feed on the chaos you cause. Every turn you inflict a mental debuff, you gain %d #SLATE#[*, healmod]#LAST# #LIGHT_RED#life#LAST# and #7FFFD4#psi#LAST#.]])
+			:format(get(t.gain, self, t) * util.bound((self.healing_factor or 1), 0, 2.5))
 		end,}
 
 newTalent {
