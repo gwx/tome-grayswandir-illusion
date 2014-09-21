@@ -34,6 +34,9 @@ newTalent {
 	points = 5,
 	require = make_require(1),
 	mode = 'passive',
+	life_gen = function(self, t)
+		return self:scale {low = 3, high = 16, t, after = 'floor',}
+		end,
 	psi_gen = function(self, t)
 		return self:scale {low = 3, high = 16, t, after = 'floor',}
 		end,
@@ -41,9 +44,12 @@ newTalent {
 		if self.turn_procs.chaos_feed then return end
 		if p.dur == 0 then return end
 		if e.status ~= 'detrimental' or e.type ~= 'mental' then return end
-		local gain = get(t.psi_gen, self, t)
-		game.logSeen(self, '%s gains %d psi from Chaos Feed.', self.name:capitalize(), gain)
-		self:incPsi(gain)
+		local life_gain = get(t.life_gen, self, t)
+		local psi_gain = get(t.psi_gen, self, t)
+		game.logSeen(self, '%s gains %d life and %d psi from Chaos Feed.',
+			self.name:capitalize(), life_gain, psi_gain)
+		self:heal(life_gain)
+		self:incPsi(psi_gain)
 		self.turn_procs.chaos_feed = true
 
 		if self:knowTalent 'T_GRAYSWANDIR_CHAOS_CASCADE' then
@@ -53,8 +59,8 @@ newTalent {
 	info = function(self, t)
 		local mult = get(t.psi_stealth_mult, self, t)
 		local add = get(t.psi_stealth_add, self, t)
-		return ([[Feed on the chaos you cause. Every turn you inflict a mental debuff, you gain %d #SLATE#[*]#LAST# #7FFFD4#psi#LAST#.]])
-			:format(get(t.psi_gen, self, t))
+		return ([[Feed on the chaos you cause. Every turn you inflict a mental debuff, you gain %d #SLATE#[*]#LAST# #LIGHT_RED#life#LAST# and %d #SLATE#[*]#LAST# #7FFFD4#psi#LAST#.]])
+			:format(get(t.life_gen, self, t), get(t.psi_gen, self, t))
 		end,}
 
 newTalent {
@@ -91,7 +97,7 @@ newTalent {
 	psi = 12,
 	tactical = {BUFF = 3,},
 	project = function(self, t) return self:scale {low = 3, high = 18, t, 'cun', after = 'damage',} end,
-	duration = function(self, t) return self:scale {low = 1.5, high = 3, t, after = 'floor',} end,
+	duration = function(self, t) return self:scale {low = 3, high = 7, t, after = 'floor',} end,
 	on_pre_use = function(self, t, silent)
 		if self:hasEffect 'EFF_GRAYSWANDIR_CHAOS_CASCADE' then return true end
 		if not silent then

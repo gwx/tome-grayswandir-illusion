@@ -38,6 +38,7 @@ newTalent {
 	psi = 3,
 	requires_target = true,
 	cooldown = 14,
+	no_energy = true,
 	radius = function(self, t)
 		return self:scale {low = 0, high = 3, t, after = 'floor',}
 		end,
@@ -47,7 +48,7 @@ newTalent {
 			range = get(t.range, self, t),}
 		end,
 	duration = function(self, t)
-		return self:scale {low = 3, high = 6, t, after = 'floor',}
+		return self:scale {low = 2, high = 5, t, after = 'floor',}
 		end,
 	action = function(self, t)
 		local _

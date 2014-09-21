@@ -91,9 +91,11 @@ util.add_superload('mod.class.NPC', function(_M)
 
 			local str = tooltip(self, x, y, seen_by)
 
-			local memory = table.get(self, 'psi_stealth_damage', game.player)
-			if memory then
-				str:add(true, ('Memory: %d%%'):format(memory * 100))
+			if str then
+				local memory = table.get(self, 'psi_stealth_damage', game.player)
+				if memory then
+					str:add(true, ('Memory: %d%%'):format(memory * 100))
+					end
 				end
 
 			if mod_stealth then game.player.stealth = nil end

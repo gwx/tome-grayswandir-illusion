@@ -19,7 +19,7 @@ return 'New Class #LIGHT_GREEN#Trickster (Psionic)',
 
 Class features:#YELLOW#
 - Use illusory walls and decoys to distract your enemies.
-- A wide variety of debuffs to that confuse and distract your foes.
+- A wide variety of debuffs that confuse and distract your foes.
 - Turn enemies' confusion into your own power.
 - Convince your enemies that they don't see you, even as you stand in plain sight.
 - Stabbing things.]]
