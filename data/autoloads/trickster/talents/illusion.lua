@@ -39,6 +39,7 @@ newTalent {
 	requires_target = true,
 	cooldown = 14,
 	no_energy = true,
+	tactical = {DISABLE = 2,},
 	radius = function(self, t)
 		return self:scale {low = 0, high = 3, t, after = 'floor',}
 		end,
@@ -188,8 +189,8 @@ newTalent {
 	psi_per = function(self, t)
 		return 0.05 * (100 + 2 * self:combatFatigue()) end,
 	requires_target = true,
-	no_npc_use = true,
 	cooldown = 30,
+	tactical = {ATTACK = {MIND = 2,},},
 	count = function(self, t)
 		return self:scale {low = 2, high = 6, t, after = 'floor',}
 		end,
@@ -221,10 +222,26 @@ newTalent {
 				local tg = get(t.target, self, t)
 				x, y = self:getTarget(tg)
 				if not x or not y then return i > 1 end
-				_, x, y = self:canProject(tg, x, y)
+				_, _, _, x, y = self:canProject(tg, x, y)
 
-				if game.level.map(x, y, Map.ACTOR) then
+				local actor = game.level.map(x, y, Map.ACTOR)
+				local terrain = game.level.map(x, y, Map.TERRAIN)
+				if actor and actor == self or
+					(actor.name == 'Illusory Decoy' and actor.summoner == self) or
+					not self.player
+				then
+					local _, _, grids = util.findFreeGrid(x, y, 5, true, {[Map.ACTOR] = true,})
+					for i = 1, #grids do
+						x, y = grids[i][1], grids[i][2]
+						_, x, y = self:canProject(tg, x, y)
+						local terrain = game.level.map(x, y, Map.TERRAIN)
+						if not terrain.does_block_move and x == grids[i][1] and y == grids[i][2] then
+							break end end end
+
+				actor = game.level.map(x, y, Map.ACTOR)
+				if actor or terrain.does_block_move then
 					game.logPlayer(self, 'Invalid Selection.')
+					if not self.player then return i > 1 end
 				else
 					self:incPsi(-psi_per)
 					valid = true
@@ -282,7 +299,8 @@ newTalent {
 		return true
 		end,
 	info = function(self, t)
-		return ([[Place up to %d #SLATE#[*]#LAST# decoys within %d spaces, lasting for %d #SLATE#[*]#LAST# turns. Upon dying, they will explode, dealing %d #FFFF44#illusion#LAST# damage in radius %d. Each decoy will cost #7FFFD4#%.1f psi#LAST#.]])
+		return ([[Place up to %d #SLATE#[*]#LAST# decoys within %d spaces, lasting for %d #SLATE#[*]#LAST# turns. Upon dying, they will explode, dealing %d #FFFF44#illusion#LAST# damage in radius %d. Each decoy will cost #7FFFD4#%.1f psi#LAST#.
+You may target an already placed decoy to place another nearby.]])
 			:format(get(t.count, self, t),
 				get(t.range, self, t),
 				get(t.duration, self, t),
