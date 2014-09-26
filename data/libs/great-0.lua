@@ -109,7 +109,7 @@ class:bindHook('ToME:load', function(self, data)
 				return result end,}
 		end)
 
-util.add_superload('mod.class.Actor', function(_M)
+superload('mod.class.Actor', function(_M)
 		local regenLife = _M.regenLife
 		function _M:regenLife()
 			local regen = self.life_regen * util.bound((self.healing_factor or 1), 0, 2.5)
@@ -129,7 +129,7 @@ util.add_superload('mod.class.Actor', function(_M)
 
 		end)
 
-util.add_superload('mod.class.Player', function(_M)
+superload('mod.class.Player', function(_M)
 		local updateMainShader = _M.updateMainShader
 		function _M:updateMainShader()
 			updateMainShader(self)

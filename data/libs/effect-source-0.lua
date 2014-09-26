@@ -16,7 +16,7 @@
 
 lib.require 'current-actor'
 
-util.add_superload('mod.class.Actor', function(_M)
+superload('mod.class.Actor', function(_M)
 		local on_set_temporary_effect = _M.on_set_temporary_effect
 		function _M:on_set_temporary_effect(eff_id, e, p)
 			p.src = p.src or game.current_actor

@@ -18,7 +18,6 @@ newAchievement {
 	name = 'Trickster', id = 'GRAYSWANDIR_TRICKSTER',
 	show = 'full',
 	desc = 'Defeated the Hidden One in the Illusory Woods.',
-	mode = 'world',
 	on_gain = function(_, src, personal)
 		game:setAllowedBuild('psionic')
 		game:setAllowedBuild('grayswandir_trickster', true)

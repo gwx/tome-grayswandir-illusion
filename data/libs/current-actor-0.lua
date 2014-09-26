@@ -14,7 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-util.add_superload('mod.class.Actor', function(_M)
+superload('mod.class.Actor', function(_M)
 		local act = _M.act
 		function _M:act()
 			game.current_actor = self

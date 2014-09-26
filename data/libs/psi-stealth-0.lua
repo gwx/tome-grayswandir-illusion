@@ -16,7 +16,7 @@
 
 lib.require 'unscale'
 
-util.add_superload('mod.class.Actor', function(_M)
+superload('mod.class.Actor', function(_M)
 		function _M:psiStealthPower(target)
 			if not self:attr 'psi_stealth_add' and not self:attr 'psi_stealth_mult' then return end
 			local power = self:unscaleCombatStats(self:combatMindpower())
@@ -79,7 +79,7 @@ util.add_superload('mod.class.Actor', function(_M)
 
 		end)
 
-util.add_superload('mod.class.NPC', function(_M)
+superload('mod.class.NPC', function(_M)
 		-- TODO figure out a better than hacking stealth?
 		local tooltip = _M.tooltip
 		function _M:tooltip(x, y, seen_by)

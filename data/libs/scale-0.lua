@@ -16,7 +16,7 @@
 
 lib.require 'unscale'
 
-util.add_superload('mod.class.interface.Combat', function(_M)
+superload('mod.class.interface.Combat', function(_M)
 
 		--- Scale
 		-- Generic Scaling Function

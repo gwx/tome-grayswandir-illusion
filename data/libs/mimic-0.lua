@@ -14,7 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-util.add_superload('mod.class.Actor', function(_M)
+superload('mod.class.Actor', function(_M)
 		local mimic_attributes = {
 			'block_sight', 'block_sense',}
 
@@ -150,7 +150,7 @@ util.add_superload('mod.class.Actor', function(_M)
 			end
 		end)
 
-util.add_superload('mod.class.NPC', function(_M)
+superload('mod.class.NPC', function(_M)
 		local tooltip = _M.tooltip
 		function _M:tooltip(x, y, seen_by)
 			if self.tooltip_default_pos then
@@ -165,7 +165,7 @@ util.add_superload('mod.class.NPC', function(_M)
 			end
 		end)
 
-util.add_superload('mod.dialogs._M', function(_M)
+superload('mod.dialogs._M', function(_M)
 		local Map = require 'engine.Map'
 
 		local generateList = _M.generateList
@@ -188,7 +188,7 @@ util.add_superload('mod.dialogs._M', function(_M)
 			end
 		end)
 
-util.add_superload('engine.Target', function(_M)
+superload('engine.Target', function(_M)
 		-- Disable seeing mimics while scanning for targets.
 		local scan = _M.scan
 		function _M:scan(dir, radius, sx, sy, filter, kind)
@@ -199,7 +199,7 @@ util.add_superload('engine.Target', function(_M)
 			end
 		end)
 
-util.add_superload('mod.class.Tooltip', function(_M)
+superload('mod.class.Tooltip', function(_M)
 		local Map = require 'engine.Map'
 		-- I'm being lazy, just overwriting the whole thing.
 
@@ -243,7 +243,7 @@ util.add_superload('mod.class.Tooltip', function(_M)
 		end)
 
 -- Marson's UI Mod
-util.add_superload('engine.ActorsSeenDisplayMin', function(_M)
+superload('engine.ActorsSeenDisplayMin', function(_M)
 		-- Prevent seeing mimics while making the seen actor list.
 		local display = _M.display
 		function _M:display()

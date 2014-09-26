@@ -169,7 +169,7 @@ newTalent {
 		return ([[Exert mental pressure on the target, decreasing their mental save by %d and giving a %d%% confuse chance, and deal %d mind damage per turn.]])
 			:format(get(t.save, self, t),
 				get(t.confuse, self, t),
-				damDesc(self, 'MIND', get(t.damage, self, t)))
+				self:damDesc('MIND', get(t.damage, self, t)))
 		end,}
 
 newTalent {

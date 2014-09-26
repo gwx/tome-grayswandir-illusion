@@ -14,7 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-util.add_superload('mod.class.interface.PartyLore', function(_M)
+superload('mod.class.interface.PartyLore', function(_M)
 		local newLore = _M.newLore
 		function _M:newLore(t)
 			newLore(self, t)
@@ -25,7 +25,7 @@ util.add_superload('mod.class.interface.PartyLore', function(_M)
 			end
 		end)
 
-util.add_superload('mod.class.Object', function(_M)
+superload('mod.class.Object', function(_M)
 		local canUseObject = _M.canUseObject
 		function _M:canUseObject()
 			local transmo
@@ -39,7 +39,7 @@ util.add_superload('mod.class.Object', function(_M)
 			end
 		end)
 
-util.add_superload('mod.dialogs.UseItemDialog', function(_M)
+superload('mod.dialogs.UseItemDialog', function(_M)
 		local generateList = _M.generateList
 		function _M:generateList()
 			generateList(self)
@@ -53,7 +53,7 @@ util.add_superload('mod.dialogs.UseItemDialog', function(_M)
 			end
 		end)
 
-util.add_superload('mod.class.Player', function(_M)
+superload('mod.class.Player', function(_M)
 		local Lore = require 'mod.class.interface.PartyLore'
 
 		local onBirth = _M.onBirth

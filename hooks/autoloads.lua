@@ -14,12 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-load('/data/general/objects/objects-maj-eyal.lua')
-
-for i = 1, 1 do
-	newEntity {define_as = 'NOTE'..i,
-		base = 'BASE_LORE',
-		name = 'letter', lore = 'grayswandir-hidden-one-'..i,
-		desc = 'A letter.',
-		rarity = false,}
-	end
+local addon = __loading_addon
+class:bindHook('ToME:load', function(self, data)
+		util.load_dir('/data-'..addon..'/autoloads/')
+		end)

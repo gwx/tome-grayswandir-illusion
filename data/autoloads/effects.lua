@@ -34,10 +34,11 @@ newEffect {
 
 		eff[src] = {
 			range = eff.range,
-			confuse = eff.confuse - (self:attr('confusion_immune') or 0) * 100,
+			confuse = eff.confuse * (1 - util.bound(self:attr 'confusion_immune' or 0, 0, 1)),
 			damage = eff.damage,
 			save = eff.save,}
 		eff.range = nil
+		eff.confuse = eff[src].confuse
 
 		eff[src].confuse_id = self:addTemporaryValue('confused', eff[src].confuse)
 		eff[src].save_id = self:addTemporaryValue('combat_mentalresist', -eff[src].save)
@@ -57,7 +58,7 @@ newEffect {
 		self:removeEffect('EFF_GRAYSWANDIR_MENTAL_PRESSURE', true, true)
 		end,
 	on_merge = function(self, old, new)
-		new.confuse = new.confuse - (self:attr('confusion_immune') or 0) * 100
+		new.confuse = new.confuse * (1 - util.bound(self:attr 'confusion_immune' or 0, 0, 1))
 		new.confuse_id = self:addTemporaryValue('confused', new.confuse)
 		new.save_id = self:addTemporaryValue('combat_mentalresist', -new.save)
 		old[new.src] = new

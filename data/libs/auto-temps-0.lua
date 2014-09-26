@@ -14,7 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-util.add_superload('mod.class.Actor', function(_M)
+superload('mod.class.Actor', function(_M)
 		--- Apply the temporary values defined in a table.
 		-- The values will be recorded in source.__tmpvals to be automatically
 		-- discarded at the appropriate time.

@@ -1,5 +1,3 @@
--- Gray's Illusions, for Tales of Maj'Eyal.
---
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
 -- the Free Software Foundation, either version 3 of the License, or
@@ -17,10 +15,11 @@
 __loading_addon = 'grayswandir-illusion'
 
 ----------------------------------------------------------------
--- Libs System
+-- Libs System v1
 
 if not lib then
 	lib = {}
+	lib.version = {}
 	lib.loaded = {}
 	lib.require = function(name, min_version)
 		min_version = min_version or -math.huge
@@ -30,15 +29,22 @@ if not lib then
 		for _, libname in pairs(libs) do
 			local version = tonumber(({libname:find(matcher)})[3])
 			if version and
-				version > (lib.loaded[name] or -math.huge) and
+				version > (lib.version[name] or -math.huge) and
 				version >= min_version
 			then
-				lib.loaded[name] = version
-				dofile(libs_dir..libname)
+				local err
+				lib.loaded[name], err = loadfile(libs_dir..libname)
+				if err then error(err) end
+				setfenv(lib.loaded[name], setmetatable({
+							superload = function(class, fun) util.add_superload(class, name, fun) end,
+							hook = function(hook, fun) util.bind_hook(hook, name, fun) end,},
+						{__index = _G,}))
+				lib.version[name] = version
+				lib.loaded[name]()
 				return true end end
-		assert(lib.loaded[name],
+		assert(lib.version[name],
 			('Addon <%s> could not find needed lib <%s>.'):format(__loading_addon, name))
-		assert(lib.loaded[name] >= min_version,
+		assert(lib.version[name] >= min_version,
 			('Addon <%s> needs lib <%s> of at least version %s.'):format(__loading_addon, name, min_version))
 		end
 	lib.require_all = function()
@@ -48,13 +54,41 @@ if not lib then
 		for _, libname in pairs(libs) do
 			local _, _, name, version = libname:find(matcher)
 			version = tonumber(version)
-			if version and version > (lib.loaded[name] or -math.huge) then
-				dofile(libs_dir..libname)
-				lib.loaded[name] = version
+			if version and version > (lib.version[name] or -math.huge) then
+				local err
+				lib.loaded[name], err = loadfile(libs_dir..libname)
+				if err then error(err) end
+				setfenv(lib.loaded[name], setmetatable({
+							superload = function(class, fun) util.add_superload(class, name, fun) end,
+							hook = function(hook, fun) util.bind_hook(hook, name, fun) end,},
+						{__index = _G,}))
+				lib.version[name] = version
+				lib.loaded[name]()
 				end end end end
 
+
 ----------------------------------------------------------------
--- Additional Superloads System
+-- Hooks Id v1
+if not util.bind_hook then
+	local hook_indices = {}
+	util.bind_hook = function(hook_name, id, fun)
+		local hook = hook_ids[hook_name]
+		if not hook then
+			hook = {}
+			hook_indices[hook_name] = hook
+			end
+
+		if not hook[id] then
+			class:bindHook(hook_name, fun)
+			hook[id] = #_hooks.list[hook_name]
+		else
+			_hooks.list[hook_name] = fun
+			end
+		end
+	end
+
+----------------------------------------------------------------
+-- Additional Superloads
 
 if not __additional_superloads then
 	__additional_superloads = {}
@@ -62,39 +96,37 @@ if not __additional_superloads then
 	--- Adds a superload for a class.
 	-- @param class the class name to superload
 	-- @param fun the superloading function - takes the class as an argument
-	util.add_superload = function(class, fun)
+	util.add_superload = function(class, id, fun)
 		local class_superloads = table.get(_G, '__additional_superloads', class)
 		if not class_superloads then
 			class_superloads = {}
 			table.set(_G, '__additional_superloads', class, class_superloads)
 			end
-		table.insert(class_superloads, fun)
-		end
-
-	-- XXX UNTESTED
-	--[[
-	local loadfilemods = util.loadfilemods
-	function util.loadfilemods(file, env)
-		local base = loadfilemods(file, env)
-		for _, f in pairs(_G.__additional_superloads[file] or {}) do
-			f(base)
-			end
-		return base
-		end
-	--]]
+		if class_superloads[id] then
+			-- Overwrite original definition.
+			class_superloads[class_superloads[id]] = fun
+		else
+			-- Insert and save position.
+			table.insert(class_superloads, fun)
+			class_superloads[id] = #class_superloads
+			end end
 
 	local te4_loader = package.loaders[3]
 	package.loaders[3] = function(name)
 		local base = te4_loader(name)
 		if base then
-			for _, f in pairs(_G.__additional_superloads[name] or {}) do
-				local prev = base
-				base = function(name)
-					prev(name)
-					print("FROM ", name, "loading special!")
-					local _M = package.loaded[name]
-					f(_M)
-					return _M
+			local superloads = _G.__additional_superloads[name] or {}
+			for id, index in pairs(superloads) do
+				if type(id) ~= 'number' then
+					local f = superloads[index]
+					local prev = base
+					base = function(name)
+						prev(name)
+						print('FROM', name, id, 'loading special.')
+						local _M = package.loaded[name]
+						f(_M)
+						return _M
+						end
 					end
 				end
 			return base
@@ -106,6 +138,7 @@ if not __additional_superloads then
 
 lib.require_all()
 
+-- Load all other hook files.
 for _, file in ipairs(fs.list '/hooks/grayswandir-illusion/') do
 	if file ~= 'load.lua' then
 		dofile('/hooks/grayswandir-illusion/'..file)

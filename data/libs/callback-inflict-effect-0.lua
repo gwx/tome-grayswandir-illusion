@@ -16,7 +16,7 @@
 
 lib.require 'effect-source'
 
-util.add_superload('mod.class.Actor', function(_M)
+superload('mod.class.Actor', function(_M)
 		_M.sustainCallbackCheck.callbackOnInflictTemporaryEffect =
 			'talents_on_inflict_temporary_effect'
 

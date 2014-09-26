@@ -44,8 +44,9 @@ newTalent {
 		return self:scale {low = 0, high = 3, t, after = 'floor',}
 		end,
 	target = function(self, t)
+		local radius = math.floor(get(t.radius, self, t))
 		return {type = 'ball', friendlyfire = false, nowarning = true,
-			radius = get(t.radius, self, t),
+			radius = radius, nolock = radius > 0,
 			range = get(t.range, self, t),}
 		end,
 	duration = function(self, t)
@@ -226,9 +227,10 @@ newTalent {
 
 				local actor = game.level.map(x, y, Map.ACTOR)
 				local terrain = game.level.map(x, y, Map.TERRAIN)
-				if actor and actor == self or
-					(actor.name == 'Illusory Decoy' and actor.summoner == self) or
-					not self.player
+				if actor and (
+					actor == self or
+						(actor.name == 'Illusory Decoy' and actor.summoner == self) or
+						not self.player)
 				then
 					local _, _, grids = util.findFreeGrid(x, y, 5, true, {[Map.ACTOR] = true,})
 					for i = 1, #grids do

@@ -75,6 +75,8 @@ return {
 					map = 'grayswandir-illusion+illusory-woods-last',},},},
 		},
 	post_process = function(level)
+		game:placeRandomLoreObject('NOTE'..level.level)
+
 		game.state:makeWeather(
 			level, 6, {
 				max_nb = 3, chance = 1, dir = 110,

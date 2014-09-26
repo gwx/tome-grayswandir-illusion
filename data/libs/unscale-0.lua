@@ -14,7 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-util.add_superload('mod.class.interface.Combat', function(_M)
+superload('mod.class.interface.Combat', function(_M)
 		function _M:unscaleCombatStats(scaled_value)
 			local unscaled = 0
 			local tier = math.floor(scaled_value / 20)

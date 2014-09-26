@@ -14,7 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-util.add_superload('mod.class.Player', function(_M)
+superload('mod.class.Player', function(_M)
 		local onEnterLevel = _M.onEnterLevel
 		function _M:onEnterLevel(zone, level)
 			onEnterLevel(self, zone, level)
