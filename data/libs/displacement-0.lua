@@ -21,6 +21,7 @@ superload('mod.class.NPC', function(_M)
 		local aiSeeTargetPos = _M.aiSeeTargetPos
 		function _M:aiSeeTargetPos(target)
 			local x, y = aiSeeTargetPos(self, target)
+			if not target then return x, y end
 			local displacement = target:attr 'grayswandir_displacement'
 			if displacement then
 				displacement = displacement * core.fov.distance(self.x, self.y, target.x, target.y) * 0.01
