@@ -1,5 +1,3 @@
--- Gray's Illusions, for Tales of Maj'Eyal.
---
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
 -- the Free Software Foundation, either version 3 of the License, or
@@ -14,12 +12,13 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-load('/data/general/objects/objects-maj-eyal.lua')
-
-for i = 1, 3 do
-	newEntity {define_as = 'NOTE'..i,
-		base = 'BASE_LORE',
-		name = 'letter', lore = 'grayswandir-hidden-one-'..i,
-		desc = 'A letter.',
-		rarity = false,}
+-- Pick a random point from a circle.
+util.pick_circle_point = function(x, y, radius)
+	if not radius or radius < 0.5 then return x, y end
+	local angle = math.rad(rng.range(0, 360))
+	-- area is proportional to radius squared, so weight the random choice in the same way.
+	local distance = math.sqrt(rng.float(0, radius * radius))
+	x = math.floor(x + 0.5 + math.cos(angle) * distance)
+	y = math.floor(y + 0.5 + math.sin(angle) * distance)
+	return x, y
 	end

@@ -34,7 +34,9 @@ util.dir_actions = {
 	autolevels = 'autolevel',
 	autolevel_schemes = 'autolevel',
 	ai = function(filename) require('engine.interface.ActorAI'):loadDefinition(filename) end,
-	achievements = function(filename) require('engine.interface.WorldAchievements'):loadDefinition(filename) end,}
+	achievements = function(filename) require('engine.interface.WorldAchievements'):loadDefinition(filename) end,
+	objects = 'object',
+	egos = 'ego',}
 
 util.load_actions = {
 	birth = function(filename) require('engine.Birther'):loadDefinition(filename) end,
@@ -42,7 +44,23 @@ util.load_actions = {
 	effect = function(filename) require('engine.interface.ActorTemporaryEffects'):loadDefinition(filename) end,
 	lore = function(filename) require('mod.class.interface.PartyLore'):loadDefinition(filename) end,
 	damage_type = function(filename) require('engine.DamageType'):loadDefinition(filename) end,
-	autolevel = function(filename) require('engine.Autolevel'):loadDefinition(filename) end,}
+	autolevel = function(filename) require('engine.Autolevel'):loadDefinition(filename) end,
+	object = function(full, base)
+		local f, err = loadfile(full)
+		if err then error(err) end
+		hook('Entity:loadList', function(self, data)
+				if data.file ~= '/data/general/objects/'..base or data.loaded[full] then return end
+				self:loadList(full, data.no_default, data.res, data.mod, data.loaded)
+				end)
+		end,
+	ego = function(full, base)
+		local f, err = loadfile(full)
+		if err then error(err) end
+		hook('Entity:loadList', function(self, data)
+				if data.file ~= '/data/general/objects/egos/'..base or data.loaded[full] then return end
+				self:loadList(full, data.no_default, data.res, data.mod, data.loaded)
+				end)
+		end,}
 
 util.file_actions = {
 	['birth.lua'] = 'birth',
@@ -62,9 +80,9 @@ function util.load_dir(dir, mode)
 			local sub_mode = mode
 			if not sub_mode then
 				full = full .. '/'
-				sub_mode = util.getval(util.dir_actions[file], full) end
+				sub_mode = util.getval(util.dir_actions[file], full, file) end
 			util.load_dir(full, sub_mode)
 		else
 			local action = util.load_actions[mode or util.file_actions[file]]
-			if action then action(full) end
+			if action then action(full, file) end
 			end end end

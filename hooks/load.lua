@@ -70,9 +70,20 @@ if not lib then
 ----------------------------------------------------------------
 -- Hooks Id v1
 if not util.bind_hook then
+	local _hooks
+	local i = 1
+	while true do
+		local name, value = debug.getupvalue(class.bindHook, i)
+		if not name then error('Cannot find _hooks.') end
+		if '_hooks' == name then
+			_hooks = value
+			break end
+		i = i + 1
+		end
+
 	local hook_indices = {}
 	util.bind_hook = function(hook_name, id, fun)
-		local hook = hook_ids[hook_name]
+		local hook = hook_indices[hook_name]
 		if not hook then
 			hook = {}
 			hook_indices[hook_name] = hook

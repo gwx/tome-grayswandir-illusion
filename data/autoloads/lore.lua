@@ -1,5 +1,3 @@
--- Gray's Illusions, for Tales of Maj'Eyal.
---
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
 -- the Free Software Foundation, either version 3 of the License, or
@@ -26,11 +24,13 @@ New area near Zigur. Recommended level is 18.
 Useful Stuff to have: High mental save, a mental status clear, some sort of tracking method.
 
 #{bold}#Antiperception#{normal}#
-Certain creatures have #{italic}#antiperception#{normal}#, which causes them to either be invisible or look like something else entirely. Antiperception power is generally equal to mindpower, but can be higher or lower based on other attributes. It is resisted with mind save. Taking damage from something with #{italic}#antiperception#{normal}# will give you a temporary 'memory' bonus, decreasing their effective antiperception power for you by (your rank * % life lost).
+Certain creatures have #{italic}#antiperception#{normal}#, which causes them to either be invisible or look like something else entirely. Antiperception power is generally equal to mindpower, but can be higher or lower based on other attributes. It is resisted with mind save. Taking damage from something with #{italic}#antiperception#{normal}# will give you a temporary 'memory' bonus, decreasing their effective antiperception power for you by (your rank * % life lost). Past 100% you start to get less memory bonus from the same amount of damage.
+
+#{bold}#Displacement#{normal}#
+Displacement causes enemies to think that you're on a different tile than you are, based on your difference from them. So a displacement of 50% will make an enemy 6 spaces away think you're on a random space within 3 spaces of your true position. The tile chosen is uniformly picked from all points in the circle.
 
 #{bold}#Illusion Damage Type#{normal}#
-Like mind damage, but on a succesful save deals no damage instead of half.
-]],}
+Like mind damage, but on a succesful save deals no damage instead of half.]],}
 
 newLore {
 	id = 'grayswandir-hidden-one-1',
@@ -51,3 +51,24 @@ When I suggested that, through dedication to nature and training, he could learn
 Too often those of our more, shadowy, disposition find themselves tempted by the foul powers of magic. But this one is yet clean! I implore you, train him, hard and well. Make no allowances, for nature's need is great, and Reorl is quite #{italic}#dedicated#{normal}# to our cause.
 
 -- Sister Leskas]],}
+
+newLore {
+	id = 'grayswandir-hidden-one-2',
+	category = 'hidden-one',
+	name = 'Experiment Log',
+	lore = [[#{italic}#Subject 22#{normal}#
+I finally got my hands on one of those wolves! Out of all the creatures from that insane place, the wolves are the hardest to #{italic}#perceive#{normal}#. It's all thanks to the efforts of the talented Brother Roerl. He fully shares my vision - to learn how to hide ourselves from the eyes of mages, just as the creatures in that wood do through nature's blessing.
+
+As for the results - the potency was remarkably improved. I could barely let my eyes rest on the woman. She still seemed to go as mad as the rest, however. I do wish there was some way to bind them from magic without cutting out their tongue - it is hard to gauge the effects when they can't answer questions. Measuring the volume of the screams can only take you so far.
+
+#{italic}#Subject 23#{normal}#
+Brother Roerl brought me another one of those so-called "paladins" today - it bewilders me how such a foul creature can be so trusting. This batch seems much more promising - it had about the same potency, and the subject's behaviour barely changed after administering it.
+
+Also of note, several doses of the solution went missing today. Perhaps brother Roerl...? No, it was probably just somebody looking for a novel way to cleanse one of the captured mages. I'll have to start keeping them under tighter lock.]],}
+
+newLore {
+	id = 'grayswandir-hidden-one-3',
+	category = 'hidden-one',
+	name = 'scrap of paper',
+	bloodstains = 3,
+	lore = [[... will be the second search party for those who have gone missing, starting with Brother Roerl. May we ...]],}

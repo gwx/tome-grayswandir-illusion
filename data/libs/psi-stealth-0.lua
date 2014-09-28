@@ -67,10 +67,16 @@ superload('mod.class.Actor', function(_M)
 			local memory = mtable[source] or 0
 			local old_memory = memory
 			memory = (memory * (mult or 1)) + (add or 0)
+			-- Past 100% you start to get less.
+			if old_memory > 1 then
+				memory = old_memory + (memory - old_memory) / old_memory
+				end
+			-- Some things are harder to remember.
 			if source.memory_resist then
 				memory = old_memory + 100 * (memory - old_memory) / (100 + source.memory_resist)
 				end
-			if memory > 1 then memory = 1 end
+			local max_memory = 1.5 + self.rank * 0.25
+			if memory > max_memory then memory = max_memory end
 			if memory <= 0 then memory = nil end
 			mtable[source] = memory
 			-- Force visibility to recheck.
