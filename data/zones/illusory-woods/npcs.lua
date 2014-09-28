@@ -170,7 +170,7 @@ newEntity {
 	move_others = true,
 
 	stats = {str = 12, dex = 25, con = 10, cun = 30, wil = 20, mag = 7,},
-	body = {INVEN = 10, MAINHAND = 1, OFFHAND = 1, BODY = 1,},
+	body = {INVEN = 10, MAINHAND = 1, OFFHAND = 1, BODY = 1, CLOAK = 1,},
 
 	instakill_immune = 1,
 	stun_immune = 0.3,
@@ -179,9 +179,12 @@ newEntity {
 	combat_mindpower = 30,
 
 	resolvers.equip {
-		{type='weapon', subtype='knife', force_drop = true, tome_drops = 'boss', autoreq = true,},
-		{type='weapon', subtype='knife', force_drop = true, tome_drops = 'boss', autoreq = true,},},
-	resolvers.drops {chance = 100, nb = 4, {tome_drops = 'boss',},},
+		{type = 'weapon', subtype = 'knife', force_drop = true, tome_drops = 'boss', autoreq = true,},
+		{type = 'weapon', subtype = 'knife', force_drop = true, tome_drops = 'boss', autoreq = true,},
+		{type = 'armor', subtype = 'light', force_drop = true, tome_drops = 'boss', autoreq = true,},
+		{type = 'armor', subtype = 'cloak', force_drop = true, autoreq = true,
+			defined = 'GRAYSWANDIR_DRAGONFLY_WING', random_art_replace = {chance = 60,},},},
+	resolvers.drops {chance = 100, nb = 3, {tome_drops = 'boss',},},
 
 	resolvers.talents {
 		T_KNIFE_MASTERY = {base = 4, every = 8, max = 6,},
@@ -189,9 +192,10 @@ newEntity {
 		T_FLURRY = {base = 1, every = 8, max = 3,},
 		T_GRAYSWANDIR_ANTIPERCEPTION = {base = 4, every = 8, max = 6,},
 		T_GRAYSWANDIR_SENSORY_OVERLOAD = {base = 2, every = 6, max = 4,},
-		T_GRAYSWANDIR_DARKNESS = {base = 3, every = 6, max = 4,},
 		T_GRAYSWANDIR_DELUSION_SHACKLES = {base = 2, every = 5, max = 4,},
 		T_GRAYSWANDIR_DELUSION_HOUNDED = {base = 2, every = 5, max = 4,},
+		T_GRAYSWANDIR_DARKNESS = {base = 3, every = 6, max = 4,},
+		T_GRAYSWANDIR_ILLUSORY_ARMY = {base = 3, every = 6, max = 6,},
 		T_GRAYSWANDIR_CHAOS_FEED = {base = 4, every = 5, max = 7,},
 		T_GRAYSWANDIR_CHAOS_CASCADE = {base = 2, every = 5, max = 5,},
 		T_GRAYSWANDIR_PANDEMONIUM = {base = 2, every = 8, max = 5,},},

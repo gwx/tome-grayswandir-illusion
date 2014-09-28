@@ -32,8 +32,22 @@ kind = {}
 
 name = ''
 desc = function(self, who)
+	local Quest = require 'engine.Quest'
 	local desc = {}
-	table.insert(desc, 'Escort the X to the recall portal.')
+
+	if not self:isStatus(Quest.DONE, 'escort') then
+		table.insert(desc, ('Escort %s to the recall portal.'):format(self.escort_name_full))
+	else
+		table.insert(desc, ('You successfully escorted %s to the recall portal.'):format(self.escort_name_full))
+
+		table.insert(desc, '')
+		if not self:isStatus(Quest.DONE) then
+			table.insert(desc, 'Treachery! The Hidden One has lured you into a trap. Defend yourself!')
+		else
+			table.insert(desc, 'You defeated The Hidden One!')
+			end
+		end
+
 	return table.concat(desc, '\n')
 	end
 
@@ -52,10 +66,11 @@ on_grant = function(self, who)
 			end
 		end
 
-	self.escort_name = NameGenerator.new(name_rules):generate()
+	self.escort_name = NameGenerator.new(name_rules):generate():capitalize()
+	self.escort_name_full = ('%s, lost trickster'):format(self.escort_name)
 
 	local escort = NPC.new {
-		name = ('%s, lost trickster'):format(self.escort_name),
+		name = self.escort_name_full,
 		type = 'humanoid', subtype = 'halfling', image = 'player/halfling_female.png',
 		display = '@', color = colors.YELLOW,
 		desc = [[She looks tired and wounded.]],
@@ -118,12 +133,12 @@ on_status_change = function(self, who, status, sub)
 			self.escort:removed()
 			game.party:removeMember(self.escort, true)
 
-			local boss = game.zone:makeEntityByName(game.level, 'actor', 'GRAYSWANDIR_HIDDEN_ONE')
-			game.zone:addEntity(game.level, boss, 'actor', x, y)
+			self.boss = game.zone:makeEntityByName(game.level, 'actor', 'GRAYSWANDIR_HIDDEN_ONE')
+			game.zone:addEntity(game.level, self.boss, 'actor', x, y)
 
-			for i = 1, 3 do
+			for i = 1, 4 do
 				local npc = game.zone:makeEntityByName(game.level, 'actor', 'GRAYSWANDIR_SHADOW_WOLF')
-				local x, y = util.findFreeGrid(boss.x, boss.y, 5, true, {[Map.ACTOR] = true,})
+				local x, y = util.findFreeGrid(self.boss.x, self.boss.y, 5, true, {[Map.ACTOR] = true,})
 				if x and y then
 					game.zone:addEntity(game.level, npc, 'actor', x, y)
 					game.level.map:particleEmitter(x, y, 1, 'summon')
@@ -133,11 +148,18 @@ on_status_change = function(self, who, status, sub)
 
 		Chat.new('grayswandir-illusory-woods-2', self.escort, game.player, {
 				name = self.escort_name,
-				continue = continue})
+				continue = continue,})
 			:invoke()
 
 	elseif not sub and status == Quest.DONE then
-		world:gainAchievement('GRAYSWANDIR_TRICKSTER', game.player)
+		local continue = function()
+			world:gainAchievement('GRAYSWANDIR_TRICKSTER', game.player)
+			end
+
+		Chat.new('grayswandir-illusory-woods-3', self.escort, game.player, {
+				name = self.escort_name,
+				continue = continue,})
+			:invoke()
 		end
 
 	end
