@@ -17,7 +17,7 @@
 long_name = 'Gray\'s Illusions'
 short_name = 'grayswandir-illusion'
 for_module = 'tome'
-version = {1,2,3}
+version = {1, 2, 4,}
 weight = 150
 author = {'grayswandir',}
 homepage = ''

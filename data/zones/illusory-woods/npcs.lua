@@ -1,5 +1,3 @@
--- Gray's Illusions, for Tales of Maj'Eyal.
---
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
 -- the Free Software Foundation, either version 3 of the License, or
@@ -125,6 +123,7 @@ newEntity {
 	psi_stealth_mult = 0.7,
 	psi_stealth_add = rm(30, 10),
 	stats = {wil = 16,},
+	talent_cd_reduction = {T_MIND_SEAR = -4,},
 	combat = {
 		dam = rlev(5, 1, 0.7),
 		atk = 0,

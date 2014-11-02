@@ -1,5 +1,3 @@
--- Gray's Illusions, for Tales of Maj'Eyal.
---
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
 -- the Free Software Foundation, either version 3 of the License, or
@@ -126,7 +124,7 @@ on_grant = function(self, who)
 
 on_status_change = function(self, who, status, sub)
 	local Quest = require 'engine.Quest'
-	if (sub == 'escort' and status == Quest.DONE) then
+	if sub == 'escort' and status == Quest.DONE then
 		local continue = function()
 			local x, y = self.escort.x, self.escort.y
 			self.escort:disappear()

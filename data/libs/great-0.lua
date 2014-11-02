@@ -1,5 +1,3 @@
--- Gray's Illusions, for Tales of Maj'Eyal.
---
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
 -- the Free Software Foundation, either version 3 of the License, or
@@ -13,10 +11,9 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 local get = util.getval
 
-class:bindHook('ToME:load', function(self, data)
+hook('ToME:load', function(self, data)
 		local Map = require 'engine.Map'
 
 		local Effects = require 'engine.interface.ActorTemporaryEffects'

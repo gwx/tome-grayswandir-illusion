@@ -68,7 +68,7 @@ superload('mod.class.Actor', function(_M)
 			local old_memory = memory
 			memory = (memory * (mult or 1)) + (add or 0)
 			-- Past 100% you start to get less.
-			if old_memory > 1 then
+			if old_memory > 1 and memory > old_memory then
 				memory = old_memory + (memory - old_memory) / old_memory
 				end
 			-- Some things are harder to remember.

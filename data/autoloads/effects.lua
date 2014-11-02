@@ -72,11 +72,12 @@ newEffect {
 		for source, sub_eff in pairs(table.clone(eff) or {}) do
 			if type(source) == 'table' then
 				if source.dead or
+					not source.isTalentActive or
 					not source:isTalentActive 'T_GRAYSWANDIR_MENTAL_PRESSURE' or
 					not source:hasLOS(self.x, self.y) or
 					core.fov.distance(self.x, self.y, source.x, source.y) > sub_eff.range
 				then
-					if source:isTalentActive 'T_GRAYSWANDIR_MENTAL_PRESSURE' then
+					if source.isTalentActive and source:isTalentActive 'T_GRAYSWANDIR_MENTAL_PRESSURE' then
 						source:forceUseTalent('T_GRAYSWANDIR_MENTAL_PRESSURE', {ignore_energy = true,})
 						end
 					self:removeTemporaryValue('confused', sub_eff.confuse_id)
@@ -87,8 +88,6 @@ newEffect {
 					eff.count = eff.count - 1
 					eff[source] = nil
 				else
-					print 'XXX'
-					table.print(source)
 					DamageType:get('MIND').projector(source, self.x, self.y, 'MIND', sub_eff.damage)
 					end end end
 		if eff.count == 0 then
